@@ -5,7 +5,7 @@
         </template>
 
         <div class="reset-password">
-            <form class="reset-password-form" @submit.prevent="resetPassword">
+            <form class="reset-password-form" @submit.prevent="changePassword">
                 <div class="form-group">
                     <label for="new-password">{{ translateText('yourEmail') }}</label>
 
@@ -63,9 +63,9 @@ export default class SetNewPassword extends Vue {
 
     newPasswordConfirmation = '';
 
-    async resetPassword() {
+    async changePassword() {
         try {
-            await axios.post('/user/reset_password', { email: this.userEmail });
+            // await axios.post('/user/reset_password', { email: this.userEmail });
             eventBus.$emit('notify-success', this.translateText('resetPasswordNotification'));
         } catch (error) {
             eventBus.$emit('notify-error', error.response.data.error);
