@@ -7,8 +7,15 @@
         <div class="reset-password">
             <form class="reset-password-form" @submit.prevent="resetPassword">
                 <div class="form-group">
-                    <label for="user-email">{{ translateText('email') }}</label>
-                    <input type="text" class="form-control" id="user-email" v-model="userEmail" />
+                    <label for="user-email">{{ translateText('yourEmail') }}</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="user-email"
+                        v-model="userEmail"
+                        required
+                    />
                 </div>
 
                 <div class="reset-password__actions">

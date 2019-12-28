@@ -77,6 +77,8 @@
     "resetPasswordPageTitle": "Восстановление пароля",
     "resetPasswordButtonTitle": "Восстановить",
 
+    "yourEmail": "Ваша электронная почта",
+
     "daysOfWeek": {
         "0":  "Воскресенье",
         "1":  "Понедельник",
