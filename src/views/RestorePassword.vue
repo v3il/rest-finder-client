@@ -35,38 +35,19 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-
-import GoogleAuthService from '@/service/GoogleAuthService';
-import FacebookAuthService from '@/service/FacebookAuthService';
 import BasePageLayout from '@/views/BasePageLayout.vue';
 
 import eventBus from '@/eventBus';
 import axios from '@/axios';
-import { namespace } from 'vuex-class';
-import VDialog from '@/components/VDialog.vue';
-import { Ref } from 'vue-property-decorator';
-
-const authModule = namespace('auth');
 
 @Component({
     name: 'RestorePassword',
     components: {
         BasePageLayout,
-        VDialog,
     },
 })
-export default class AuthPage extends Vue {
+export default class RestorePassword extends Vue {
     userEmail = '';
-
-    @authModule.Action('login') login!: Function;
-
-    @authModule.Action('register') register!: Function;
-
-    @authModule.Action('loginWithGoogle') loginWithGoogle!: Function;
-
-    @authModule.Action('loginWithFacebook') loginWithFacebook!: Function;
-
-    @authModule.Mutation('SET_TOKEN') setToken!: Function;
 
     async resetPassword() {
         try {
