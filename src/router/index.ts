@@ -6,9 +6,9 @@ import store from '@/store';
 import MainPage from '@/views/MainPage.vue';
 import ControlPanel from '@/views/ControlPanel.vue';
 import RestorePassword from '@/views/RestorePassword.vue';
-import AuthPage from '../views/AuthPage.vue';
-import EmailConfirmationPage from '../views/EmailConfirmationPage.vue';
-import SetNewPassword from "@/views/SetNewPassword.vue";
+import AuthPage from '@/views/AuthPage.vue';
+import EmailConfirmationPage from '@/views/EmailConfirmationPage.vue';
+import ChangePassword from '@/views/ChangePassword.vue';
 
 Vue.use(VueRouter);
 
@@ -34,9 +34,9 @@ const routes: Array<RouteConfig> = [
         component: RestorePassword,
     },
     {
-        path: '/set_new_password',
-        name: 'set_new_password',
-        component: SetNewPassword,
+        path: '/change_password',
+        name: 'change_password',
+        component: ChangePassword,
     },
     {
         path: '/',
