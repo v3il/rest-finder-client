@@ -8,6 +8,7 @@ import ControlPanel from '@/views/ControlPanel.vue';
 import RestorePassword from '@/views/RestorePassword.vue';
 import AuthPage from '../views/AuthPage.vue';
 import EmailConfirmationPage from '../views/EmailConfirmationPage.vue';
+import SetNewPassword from "@/views/SetNewPassword.vue";
 
 Vue.use(VueRouter);
 
@@ -31,6 +32,11 @@ const routes: Array<RouteConfig> = [
         path: '/restore_password',
         name: 'restore_password',
         component: RestorePassword,
+    },
+    {
+        path: '/set_new_password',
+        name: 'set_new_password',
+        component: SetNewPassword,
     },
     {
         path: '/',
