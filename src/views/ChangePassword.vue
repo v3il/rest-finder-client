@@ -7,7 +7,7 @@
         <div class="reset-password">
             <form class="reset-password-form" @submit.prevent="changePassword">
                 <div class="form-group">
-                    <label for="new-password">{{ translateText('yourEmail') }}</label>
+                    <label for="new-password">{{ translateText('newPassword') }}</label>
 
                     <input
                         type="password"
@@ -19,7 +19,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="new-password-confirmation">{{ translateText('yourEmail') }}</label>
+                    <label for="new-password-confirmation">{{
+                        translateText('newPasswordConfirmation')
+                    }}</label>
 
                     <input
                         type="password"

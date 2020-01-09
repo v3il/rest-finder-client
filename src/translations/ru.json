@@ -78,6 +78,8 @@
     "resetPasswordButtonTitle": "Восстановить",
     "yourEmail": "Ваша электронная почта",
     "resetPasswordNotification": "На Вашу почту было отправлено письмо с ссылкой для сброса пароля",
+    "newPassword": "Новый пароль",
+    "newPasswordConfirmation": "Повторите новый пароль",
 
     "daysOfWeek": {
         "0":  "Воскресенье",
