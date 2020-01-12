@@ -41,6 +41,7 @@ import FacebookAuthService from '@/service/FacebookAuthService';
 import BasePageLayout from '@/views/BasePageLayout.vue';
 
 import eventBus from '@/eventBus';
+import axios from '@/axios';
 import { namespace } from 'vuex-class';
 import VDialog from '@/components/VDialog.vue';
 import { Ref } from 'vue-property-decorator';
@@ -68,7 +69,12 @@ export default class AuthPage extends Vue {
     @authModule.Mutation('SET_TOKEN') setToken!: Function;
 
     async resetPassword() {
-        console.log(1);
+        try {
+            await axios.post('/user/reset_password', { email: this.userEmail });
+            eventBus.$emit('notify-success', this.translateText('resetPasswordNotification'));
+        } catch (error) {
+            eventBus.$emit('notify-error', error.response.data.error);
+        }
     }
 }
 </script>
