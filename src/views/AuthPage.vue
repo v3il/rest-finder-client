@@ -49,8 +49,10 @@
                     </button>
                 </div>
 
-                <div v-if="isLoginAction">
-                    <a href="#" @click.prevent>{{ translateText('restorePassword') }}</a>
+                <div class="form-auth-reset-password" v-if="isLoginAction">
+                    <a href="#" @click.prevent="resetPasswordDialog.open()">{{
+                        translateText('restorePassword')
+                    }}</a>
                 </div>
 
                 <div class="text-center auth-form__register-link">
@@ -66,25 +68,23 @@
 
             <v-dialog ref="resetPasswordDialog" :max-width="600">
                 <template slot="header">
-                    {{ translateText('addPlaceDialogTitle') }}
+                    {{ translateText('resetPasswordDialogTitle') }}
                 </template>
 
                 <div class="form-group">
-                    <label for="place-name">{{ translateText('restDurations') }}</label>
+                    <label for="user-email">{{ translateText('email') }}</label>
 
-                    <select class="form-control" v-model="restDuration">
-                        <option
-                            v-for="restDuration in filters.restDurations"
-                            :value="restDuration.id"
-                            :key="restDuration.id"
-                            >{{ restDuration.name }}</option
-                        >
-                    </select>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="user-email"
+                        v-model="restorePasswordUserEmail"
+                    />
                 </div>
 
                 <template slot="footer">
-                    <button class="btn btn-primary left-button" @click="_resetPassword">
-                        {{ translateText('addPlace') }}
+                    <button class="btn btn-primary left-button" @click="resetPasswordRequest">
+                        {{ translateText('resetPasswordDialogButtonTitle') }}
                     </button>
 
                     <button class="btn btn-secondary" @click="resetPasswordDialog.triggerClose()">
@@ -142,8 +142,6 @@ export default class AuthPage extends Vue {
     mounted() {
         this.isLoginAction = this.$route.name === 'login';
         this.initGoogleAuth();
-
-        console.log('Auth');
     }
 
     async auth() {
@@ -217,9 +215,13 @@ export default class AuthPage extends Vue {
         });
     }
 
-    resetPassword() {}
+    resetPassword() {
+        console.log(1);
+    }
 
-    async _resetPassword() {}
+    async resetPasswordRequest() {
+        return 0;
+    }
 }
 </script>
 
@@ -261,5 +263,9 @@ export default class AuthPage extends Vue {
     .btn:last-child {
         margin-right: 0;
     }
+}
+
+.form-auth-reset-password {
+    margin-top: 6px;
 }
 </style>

@@ -73,8 +73,9 @@
     "updatePlace": "Обновить данные",
     "placesShown": "Заведений отображается: %s",
     "allCity": "Весь город",
-
     "restorePassword": "Восстановить пароль",
+    "resetPasswordDialogTitle": "Восстановление пароля",
+    "resetPasswordDialogButtonTitle": "Восстановить",
 
     "daysOfWeek": {
         "0":  "Воскресенье",

@@ -73,8 +73,9 @@
     "updatePlace": "Оновити дані",
     "placesShown": "Закладів відображається: %s",
     "allCity": "Все місто",
-
-    "restorePassword": "Восстановить пароль",
+    "restorePassword": "Відновити пароль",
+    "resetPasswordDialogTitle": "Відновлення паролю",
+    "resetPasswordDialogButtonTitle": "Відновити",
 
     "daysOfWeek": {
         "0":  "Неділя",
