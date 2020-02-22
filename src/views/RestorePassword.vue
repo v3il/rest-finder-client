@@ -5,20 +5,15 @@
         </template>
 
         <div class="auth-form">
-            <form class="form-signin" @submit.prevent="auth">
+            <form class="form-signin" @submit.prevent="resetPassword">
                 <div class="form-group">
                     <label for="user-email">{{ translateText('email') }}</label>
 
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="user-email"
-                        v-model="restorePasswordUserEmail"
-                    />
+                    <input type="text" class="form-control" id="user-email" v-model="userEmail" />
                 </div>
 
                 <div>
-                    <button class="btn btn-primary left-button" @click="resetPasswordRequest">
+                    <button class="btn btn-primary left-button" type="submit">
                         {{ translateText('resetPasswordButtonTitle') }}
                     </button>
 
@@ -54,13 +49,7 @@ const authModule = namespace('auth');
     },
 })
 export default class AuthPage extends Vue {
-    isLoginAction = true;
-
     userEmail = '';
-
-    userPassword = '';
-
-    restorePasswordUserEmail = '';
 
     @authModule.Action('login') login!: Function;
 
@@ -72,90 +61,8 @@ export default class AuthPage extends Vue {
 
     @authModule.Mutation('SET_TOKEN') setToken!: Function;
 
-    @Ref() resetPasswordDialog!: any;
-
-    mounted() {
-        this.isLoginAction = this.$route.name === 'login';
-        this.initGoogleAuth();
-    }
-
-    async auth() {
-        try {
-            const requestData = {
-                email: this.userEmail,
-                password: this.userPassword,
-            };
-
-            if (this.isLoginAction) {
-                const response = await this.login(requestData);
-                const { tokenData, userHash } = response.data;
-
-                if (userHash) {
-                    this.$router.replace({
-                        name: 'email_confirmation',
-                        query: { userHash },
-                    });
-                } else {
-                    this.setToken(tokenData);
-                    this.$router.replace({ name: 'home' });
-                }
-            } else {
-                const response = await this.register(requestData);
-                const { userHash } = response.data;
-
-                this.$router.replace({
-                    name: 'email_confirmation',
-                    query: { userHash },
-                });
-            }
-        } catch (error) {
-            eventBus.$emit('notify-error', error.response.data.error);
-        }
-    }
-
-    async initGoogleAuth() {
-        const instance: any = await GoogleAuthService.getInstance();
-
-        instance.attachClickHandler(
-            document.querySelector('.js-login-with-google'),
-            {},
-            async (googleUser: any) => {
-                try {
-                    const idToken = googleUser.getAuthResponse().id_token;
-
-                    await this.loginWithGoogle(idToken);
-                    this.$router.replace({ name: 'home' });
-                } catch (error) {
-                    eventBus.$emit('notify-error', error.message);
-                }
-            },
-            (error: any) => {
-                eventBus.$emit('notify-error', error.message);
-            },
-        );
-    }
-
-    async loginWithFB() {
-        const instance: any = FacebookAuthService.getInstance();
-
-        instance.login(async (response: any) => {
-            const { accessToken, userID: userId } = response.authResponse;
-
-            await this.loginWithFacebook({
-                accessToken,
-                userId,
-            });
-
-            this.$router.replace({ name: 'home' });
-        });
-    }
-
-    resetPassword() {
+    async resetPassword() {
         console.log(1);
-    }
-
-    async resetPasswordRequest() {
-        return 0;
     }
 }
 </script>
