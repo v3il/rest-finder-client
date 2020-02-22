@@ -41,7 +41,7 @@ interface DefaultModel {
  *       name:
  *         type: string
  */
-export interface RestPlaceCategoryModel extends DefaultModel {}
+export type RestPlaceCategoryModel = DefaultModel;
 
 /**
  * @swagger
@@ -56,7 +56,7 @@ export interface RestPlaceCategoryModel extends DefaultModel {}
  *       name:
  *         type: string
  */
-export interface RestDurationModel extends DefaultModel {}
+export type RestDurationModel = DefaultModel;
 
 /**
  * @swagger
@@ -71,7 +71,7 @@ export interface RestDurationModel extends DefaultModel {}
  *       name:
  *         type: string
  */
-export interface RestCostModel extends DefaultModel {}
+export type RestCostModel = DefaultModel;
 
 /**
  * @swagger
@@ -86,7 +86,7 @@ export interface RestCostModel extends DefaultModel {}
  *       name:
  *         type: string
  */
-export interface CompanySizeModel extends DefaultModel {}
+export type CompanySizeModel = DefaultModel;
 
 /**
  * @swagger
@@ -218,9 +218,9 @@ export interface DefaultStaticModel {
     nameTextId: string;
 }
 
-export interface RestDurationStaticModel extends DefaultStaticModel {}
-export interface RestCostStaticModel extends DefaultStaticModel {}
-export interface CompanySizeStaticModel extends DefaultStaticModel {}
+export type RestDurationStaticModel = DefaultStaticModel;
+export type RestCostStaticModel = DefaultStaticModel;
+export type CompanySizeStaticModel = DefaultStaticModel;
 export interface CategoryStaticModel extends DefaultStaticModel {
     googleId: string;
     defaultRestDuration: number;
@@ -265,5 +265,5 @@ export interface ReviewModel {
     user: {
         id: number;
         email: string;
-    }
+    };
 }

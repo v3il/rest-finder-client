@@ -74,8 +74,8 @@
     "placesShown": "Заведений отображается: %s",
     "allCity": "Весь город",
     "restorePassword": "Восстановить пароль",
-    "resetPasswordDialogTitle": "Восстановление пароля",
-    "resetPasswordDialogButtonTitle": "Восстановить",
+    "resetPasswordPageTitle": "Восстановление пароля",
+    "resetPasswordButtonTitle": "Восстановить",
 
     "daysOfWeek": {
         "0":  "Воскресенье",

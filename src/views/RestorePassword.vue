@@ -1,68 +1,30 @@
 <template>
     <base-page-layout>
         <template slot="pageTitle">
-            {{ isLoginAction ? translateText('login') : translateText('registration') }}
+            {{ translateText('resetPasswordPageTitle') }}
         </template>
 
-        <div class="auth-form" :key="$route.name">
+        <div class="auth-form">
             <form class="form-signin" @submit.prevent="auth">
-                <div class="form-label-group">
-                    <label for="inputEmail">{{ translateText('email') }}</label>
+                <div class="form-group">
+                    <label for="user-email">{{ translateText('email') }}</label>
 
                     <input
                         type="text"
-                        id="inputEmail"
                         class="form-control"
-                        :placeholder="translateText('email')"
-                        v-model="userEmail"
-                        autofocus
+                        id="user-email"
+                        v-model="restorePasswordUserEmail"
                     />
                 </div>
 
-                <div class="form-label-group">
-                    <label for="inputPassword">{{ translateText('password') }}</label>
-
-                    <input
-                        type="password"
-                        id="inputPassword"
-                        class="form-control"
-                        :placeholder="translateText('password')"
-                        v-model="userPassword"
-                    />
-
-                    <small id="emailHelp" class="form-text text-muted">{{
-                        translateText('passwordHint')
-                    }}</small>
-                </div>
-
-                <div class="form-auth-buttons">
-                    <button class="btn btn-primary btn-block" type="submit">
-                        {{ isLoginAction ? translateText('logIn') : translateText('register') }}
+                <div>
+                    <button class="btn btn-primary left-button" @click="resetPasswordRequest">
+                        {{ translateText('resetPasswordButtonTitle') }}
                     </button>
 
-                    <button class="btn btn-primary js-login-with-google" type="button">
-                        <font-awesome-icon :icon="['fab', 'google']" />
-                    </button>
-
-                    <button class="btn btn-primary" type="button" @click="loginWithFB">
-                        <font-awesome-icon :icon="['fab', 'facebook-f']" />
-                    </button>
-                </div>
-
-                <div class="form-auth-reset-password" v-if="isLoginAction">
-                    <router-link :to="{ name: 'restore_password' }">{{
-                        translateText('restorePassword')
-                    }}</router-link>
-                </div>
-
-                <div class="text-center auth-form__register-link">
-                    <router-link :to="{ name: 'register' }" v-if="isLoginAction">
-                        {{ translateText('register') }}
-                    </router-link>
-
-                    <router-link :to="{ name: 'login' }" v-else>
+                    <button class="btn btn-secondary" @click="$router.push({ name: 'login' })">
                         {{ translateText('logIn') }}
-                    </router-link>
+                    </button>
                 </div>
             </form>
         </div>
@@ -79,14 +41,16 @@ import BasePageLayout from '@/views/BasePageLayout.vue';
 
 import eventBus from '@/eventBus';
 import { namespace } from 'vuex-class';
+import VDialog from '@/components/VDialog.vue';
 import { Ref } from 'vue-property-decorator';
 
 const authModule = namespace('auth');
 
 @Component({
-    name: 'AuthPage',
+    name: 'RestorePassword',
     components: {
         BasePageLayout,
+        VDialog,
     },
 })
 export default class AuthPage extends Vue {
@@ -95,6 +59,8 @@ export default class AuthPage extends Vue {
     userEmail = '';
 
     userPassword = '';
+
+    restorePasswordUserEmail = '';
 
     @authModule.Action('login') login!: Function;
 
@@ -182,6 +148,14 @@ export default class AuthPage extends Vue {
 
             this.$router.replace({ name: 'home' });
         });
+    }
+
+    resetPassword() {
+        console.log(1);
+    }
+
+    async resetPasswordRequest() {
+        return 0;
     }
 }
 </script>

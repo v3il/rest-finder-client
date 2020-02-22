@@ -5,6 +5,7 @@ import store from '@/store';
 
 import MainPage from '@/views/MainPage.vue';
 import ControlPanel from '@/views/ControlPanel.vue';
+import RestorePassword from '@/views/RestorePassword.vue';
 import AuthPage from '../views/AuthPage.vue';
 import EmailConfirmationPage from '../views/EmailConfirmationPage.vue';
 
@@ -25,6 +26,11 @@ const routes: Array<RouteConfig> = [
         path: '/email_confirmation',
         name: 'email_confirmation',
         component: EmailConfirmationPage,
+    },
+    {
+        path: '/restore_password',
+        name: 'restore_password',
+        component: RestorePassword,
     },
     {
         path: '/',
