@@ -4,15 +4,14 @@
             {{ translateText('resetPasswordPageTitle') }}
         </template>
 
-        <div class="auth-form">
-            <form class="form-signin" @submit.prevent="resetPassword">
+        <div class="reset-password">
+            <form class="reset-password-form" @submit.prevent="resetPassword">
                 <div class="form-group">
                     <label for="user-email">{{ translateText('email') }}</label>
-
                     <input type="text" class="form-control" id="user-email" v-model="userEmail" />
                 </div>
 
-                <div>
+                <div class="reset-password__actions">
                     <button class="btn btn-primary left-button" type="submit">
                         {{ translateText('resetPasswordButtonTitle') }}
                     </button>
@@ -68,17 +67,13 @@ export default class AuthPage extends Vue {
 </script>
 
 <style scoped lang="scss">
-.auth-form {
+.reset-password {
     display: flex;
     align-items: center;
     height: 100%;
-
-    &__register-link {
-        margin-top: 12px;
-    }
 }
 
-.form-signin {
+.reset-password-form {
     width: 100%;
     max-width: 420px;
     padding: 15px;
@@ -94,7 +89,7 @@ export default class AuthPage extends Vue {
     font-weight: bold;
 }
 
-.form-auth-buttons {
+.reset-password__actions {
     display: flex;
 
     .btn {
@@ -105,9 +100,5 @@ export default class AuthPage extends Vue {
     .btn:last-child {
         margin-right: 0;
     }
-}
-
-.form-auth-reset-password {
-    margin-top: 6px;
 }
 </style>
