@@ -74,8 +74,8 @@ import Component from 'vue-class-component';
 import Vue from 'vue';
 
 import authService from '@/service/authService';
-// import googleAuthService from '@/service/googleAuthService';
-// import facebookAuthService from '@/service/facebookAuthService';
+import GoogleAuthService from '@/service/GoogleAuthService';
+import FacebookAuthService from '@/service/FacebookAuthService';
 
 @Component({
     name: 'AuthPage',
@@ -117,34 +117,34 @@ export default class AuthPage extends Vue {
     }
 
     async initGoogleAuth() {
-        // const instance = (await googleAuthService.getInstance()) as any;
-        //
-        // instance.attachClickHandler(
-        //     document.querySelector('.js-login-with-google'),
-        //     {},
-        //     async (googleUser: any) => {
-        //         try {
-        //             const idToken = googleUser.getAuthResponse().id_token;
-        //             await authService.loginWithGoogle(idToken);
-        //             this.$router.replace({ name: 'home' });
-        //         } catch (error) {
-        //             this.authError = error.message;
-        //         }
-        //     },
-        //     (error: any) => {
-        //         this.authError = error.message;
-        //     },
-        // );
+        const instance: any = await GoogleAuthService.getInstance();
+
+        instance.attachClickHandler(
+            document.querySelector('.js-login-with-google'),
+            {},
+            async (googleUser: any) => {
+                try {
+                    const idToken = googleUser.getAuthResponse().id_token;
+                    await authService.loginWithGoogle(idToken);
+                    this.$router.replace({ name: 'home' });
+                } catch (error) {
+                    this.authError = error.message;
+                }
+            },
+            (error: any) => {
+                this.authError = error.message;
+            },
+        );
     }
 
     async loginWithFacebook() {
-        // const fb = facebookAuthService.getInstance();
-        // fb.login(async (response: any) => {
-        //     const { accessToken } = response.authResponse;
-        //     const userId = response.authResponse.userID;
-        //     await authService.loginWithFacebook(accessToken, userId);
-        //     this.$router.replace({ name: 'home' });
-        // });
+        const instance: any = FacebookAuthService.getInstance();
+
+        instance.login(async (response: any) => {
+            const { accessToken, userID: userId } = response.authResponse;
+            await authService.loginWithFacebook(accessToken, userId);
+            this.$router.replace({ name: 'home' });
+        });
     }
 }
 </script>

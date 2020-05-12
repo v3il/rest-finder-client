@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
+import authService from '@/service/authService';
 import AuthPage from '../views/AuthPage.vue';
 
 Vue.use(VueRouter);
@@ -25,7 +26,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const isAuthorized = false; // authTokenService.isAuthorized();
+    const isAuthorized = authService.isAuthorized();
 
     if (['login', 'register'].includes(to.name || '') && isAuthorized) {
         return next({ name: 'home' });

@@ -1,7 +1,7 @@
 class GoogleAuthService {
-    private instance: object = {};
+    private static instance?: object;
 
-    getInstance() {
+    static async getInstance(): Promise<any> {
         if (this.instance) {
             return Promise.resolve(this.instance);
         }
@@ -18,4 +18,4 @@ class GoogleAuthService {
     }
 }
 
-export default new GoogleAuthService();
+export default GoogleAuthService;
