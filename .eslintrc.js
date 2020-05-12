@@ -25,10 +25,6 @@ module.exports = {
         'vue/valid-v-for': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         'import/no-cycle': 'off',
-        'no-param-reassign': 'off',
         'consistent-return': 'off',
-        'class-methods-use-this': 'off',
-        '@typescript-eslint/camelcase': 'off',
-        'no-underscore-dangle': 'off',
     },
 };

@@ -1,4 +1,4 @@
-class FacebookAuthService {
+export default class FacebookAuthService {
     private static instance?: object;
 
     static getInstance(): any {
@@ -18,5 +18,3 @@ class FacebookAuthService {
         return this.instance;
     }
 }
-
-export default FacebookAuthService;

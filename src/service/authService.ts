@@ -21,16 +21,6 @@ class AuthService {
         }
     }
 
-    _saveData(tokenData: TokenData) {
-        this.tokenData = tokenData;
-        localStorage.setItem(tokenLocalStorageKey, JSON.stringify(tokenData));
-    }
-
-    _removeData() {
-        this.tokenData = null;
-        localStorage.removeItem(tokenLocalStorageKey);
-    }
-
     getToken() {
         return this.tokenData?.token;
     }
@@ -40,33 +30,35 @@ class AuthService {
     }
 
     login(user: object) {
-        return this._authRequest('/auth/local', user);
+        return this.authRequest('/auth/local', user);
     }
 
     register(user: object) {
-        return this._authRequest('/auth/register', user);
+        return this.authRequest('/auth/register', user);
     }
 
     loginWithGoogle(googleIdToken: string) {
-        return this._authRequest('/auth/google', { token: googleIdToken });
+        return this.authRequest('/auth/google', { token: googleIdToken });
     }
 
     loginWithFacebook(accessToken: string, userId: string) {
-        return this._authRequest('/auth/facebook', { accessToken, userId });
+        return this.authRequest('/auth/facebook', { accessToken, userId });
     }
 
     async logout() {
-        this._removeData();
+        this.tokenData = null;
+        localStorage.removeItem(tokenLocalStorageKey);
 
         (await GoogleAuthService.getInstance()).disconnect();
         await FacebookAuthService.getInstance().logout();
     }
 
-    async _authRequest(url: string, data: object) {
+    private async authRequest(url: string, data: object) {
         const response = await axios.post(url, data);
         const { tokenData } = response.data;
 
-        this._saveData(tokenData);
+        this.tokenData = tokenData;
+        localStorage.setItem(tokenLocalStorageKey, JSON.stringify(tokenData));
     }
 }
 

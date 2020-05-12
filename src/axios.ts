@@ -9,6 +9,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((config) => {
+    // eslint-disable-next-line
     config.headers.authorization = `Bearer ${authService.getToken()}`;
     return config;
 });

@@ -1,4 +1,4 @@
-class GoogleAuthService {
+export default class GoogleAuthService {
     private static instance?: object;
 
     static async getInstance(): Promise<any> {
@@ -9,6 +9,7 @@ class GoogleAuthService {
         return new Promise((resolve) => {
             window.gapi.load('auth2', () => {
                 this.instance = window.gapi.auth2.init({
+                    // eslint-disable-next-line
                     client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID,
                 });
 
@@ -17,5 +18,3 @@ class GoogleAuthService {
         });
     }
 }
-
-export default GoogleAuthService;
