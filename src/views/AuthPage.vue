@@ -1,84 +1,81 @@
 <template>
-    <div class="auth-form" :key="$route.name">
-        <form class="form-signin" @submit.prevent="auth">
-            <div class="text-center mb-4">
-                <h1 class="h3 mb-3 font-weight-normal">
-                    {{
-                        isLoginAction
-                            ? uSign('translate', 'Вход на сайт')
-                            : uSign('translate', 'Регистрация')
-                    }}
-                </h1>
-            </div>
+    <base-page-layout>
+        <template slot="pageTitle">
+            {{ isLoginAction ? translateText('login') : translateText('registration') }}
+        </template>
 
-            <div class="form-label-group">
-                <label for="inputEmail">{{ uSign('translate', 'Email') }}</label>
+        <div class="auth-form" :key="$route.name">
+            <form class="form-signin" @submit.prevent="auth">
+                <div class="form-label-group">
+                    <label for="inputEmail">{{ translateText('email') }}</label>
 
-                <input
-                    type="text"
-                    id="inputEmail"
-                    class="form-control"
-                    :placeholder="uSign('translate', 'Email')"
-                    v-model="userEmail"
-                    autofocus
-                />
-            </div>
+                    <input
+                        type="text"
+                        id="inputEmail"
+                        class="form-control"
+                        :placeholder="translateText('email')"
+                        v-model="userEmail"
+                        autofocus
+                    />
+                </div>
 
-            <div class="form-label-group">
-                <label for="inputPassword">{{ uSign('translate', 'Пароль') }}</label>
+                <div class="form-label-group">
+                    <label for="inputPassword">{{ translateText('password') }}</label>
 
-                <input
-                    type="password"
-                    id="inputPassword"
-                    class="form-control"
-                    :placeholder="uSign('translate', 'Пароль')"
-                    v-model="userPassword"
-                />
-            </div>
+                    <input
+                        type="password"
+                        id="inputPassword"
+                        class="form-control"
+                        :placeholder="translateText('password')"
+                        v-model="userPassword"
+                    />
+                </div>
 
-            <div class="alert alert-danger" role="alert" v-if="authError">{{ authError }}</div>
+                <div class="alert alert-danger" role="alert" v-if="authError">{{ authError }}</div>
 
-            <div class="form-auth-buttons">
-                <button class="btn btn-primary btn-block" type="submit">
-                    {{
-                        isLoginAction
-                            ? uSign('translate', 'Войти')
-                            : uSign('translate', 'Зарегистрироваться')
-                    }}
-                </button>
+                <div class="form-auth-buttons">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        {{ isLoginAction ? translateText('logIn') : translateText('register') }}
+                    </button>
 
-                <button class="btn btn-primary js-login-with-google" type="button">
-                    <font-awesome-icon :icon="['fab', 'google']" />
-                </button>
+                    <button class="btn btn-primary js-login-with-google" type="button">
+                        <font-awesome-icon :icon="['fab', 'google']" />
+                    </button>
 
-                <button class="btn btn-primary" type="button" @click="loginWithFacebook">
-                    <font-awesome-icon :icon="['fab', 'facebook-f']" />
-                </button>
-            </div>
+                    <button class="btn btn-primary" type="button" @click="loginWithFacebook">
+                        <font-awesome-icon :icon="['fab', 'facebook-f']" />
+                    </button>
+                </div>
 
-            <div class="text-center auth-form__register-link">
-                <router-link :to="{ name: 'register' }" v-if="isLoginAction">
-                    {{ uSign('translate', 'Зарегистрироваться') }}
-                </router-link>
+                <div class="text-center auth-form__register-link">
+                    <router-link :to="{ name: 'register' }" v-if="isLoginAction">
+                        {{ translateText('register') }}
+                    </router-link>
 
-                <router-link :to="{ name: 'login' }" v-else>
-                    {{ uSign('translate', 'Войти') }}
-                </router-link>
-            </div>
-        </form>
-    </div>
+                    <router-link :to="{ name: 'login' }" v-else>
+                        {{ translateText('logIn') }}
+                    </router-link>
+                </div>
+            </form>
+        </div>
+    </base-page-layout>
 </template>
 
 <script lang="ts">
-import Component from 'vue-class-component';
 import Vue from 'vue';
+import Component from 'vue-class-component';
 
 import authService from '@/service/authService';
 import GoogleAuthService from '@/service/GoogleAuthService';
 import FacebookAuthService from '@/service/FacebookAuthService';
+import { TokenData } from '@/index.d.ts';
+import BasePageLayout from '@/views/BasePageLayout.vue';
 
 @Component({
     name: 'AuthPage',
+    components: {
+        BasePageLayout,
+    },
 })
 export default class AuthPage extends Vue {
     isLoginAction = true;
@@ -104,12 +101,31 @@ export default class AuthPage extends Vue {
             };
 
             if (this.isLoginAction) {
-                await authService.login(requestData);
-            } else {
-                await authService.register(requestData);
-            }
+                const response = await authService.login(requestData);
+                const { tokenData, userHash } = response.data;
 
-            this.$router.replace({ name: 'home' });
+                if (userHash) {
+                    this.$router.replace({
+                        name: 'email_confirmation',
+                        query: {
+                            userHash,
+                        },
+                    });
+                } else {
+                    authService.saveTokenData(tokenData as TokenData);
+                    this.$router.replace({ name: 'home' });
+                }
+            } else {
+                const response = await authService.register(requestData);
+                const { userHash } = response.data;
+
+                this.$router.replace({
+                    name: 'email_confirmation',
+                    query: {
+                        userHash,
+                    },
+                });
+            }
         } catch (error) {
             console.error(error);
             this.authError = error.response.data.error;
@@ -153,7 +169,7 @@ export default class AuthPage extends Vue {
 .auth-form {
     display: flex;
     align-items: center;
-    min-height: 100vh;
+    height: 100%;
 
     &__register-link {
         margin-top: 12px;

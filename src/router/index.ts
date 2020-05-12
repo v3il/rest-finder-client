@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router';
 
 import authService from '@/service/authService';
 import AuthPage from '../views/AuthPage.vue';
+import EmailConfirmationPage from '../views/EmailConfirmationPage.vue';
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,11 @@ const routes: Array<RouteConfig> = [
         path: '/register',
         name: 'register',
         component: AuthPage,
+    },
+    {
+        path: '/email_confirmation',
+        name: 'email_confirmation',
+        component: EmailConfirmationPage,
     },
 ];
 

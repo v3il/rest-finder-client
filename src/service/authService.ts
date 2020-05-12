@@ -30,11 +30,11 @@ class AuthService {
     }
 
     login(user: object) {
-        return this.authRequest('/auth/local', user);
+        return axios.post('/auth/local', user);
     }
 
     register(user: object) {
-        return this.authRequest('/auth/register', user);
+        return axios.post('/auth/register', user);
     }
 
     loginWithGoogle(googleIdToken: string) {
@@ -53,12 +53,16 @@ class AuthService {
         await FacebookAuthService.getInstance().logout();
     }
 
+    saveTokenData(tokenData: TokenData) {
+        this.tokenData = tokenData;
+        localStorage.setItem(tokenLocalStorageKey, JSON.stringify(tokenData));
+    }
+
     private async authRequest(url: string, data: object) {
         const response = await axios.post(url, data);
         const { tokenData } = response.data;
 
-        this.tokenData = tokenData;
-        localStorage.setItem(tokenLocalStorageKey, JSON.stringify(tokenData));
+        this.saveTokenData(tokenData);
     }
 }
 

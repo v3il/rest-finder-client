@@ -24,7 +24,9 @@ module.exports = {
         ],
         'vue/valid-v-for': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
         'import/no-cycle': 'off',
         'consistent-return': 'off',
+        'class-methods-use-this': 'off',
     },
 };
