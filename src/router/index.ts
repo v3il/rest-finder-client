@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
 import authService from '@/service/authService';
+import MainPage from '@/views/MainPage.vue';
 import AuthPage from '../views/AuthPage.vue';
 import EmailConfirmationPage from '../views/EmailConfirmationPage.vue';
 
@@ -22,6 +23,14 @@ const routes: Array<RouteConfig> = [
         path: '/email_confirmation',
         name: 'email_confirmation',
         component: EmailConfirmationPage,
+    },
+    {
+        path: '/',
+        name: 'home',
+        component: MainPage,
+        meta: {
+            requiresAuth: true,
+        },
     },
 ];
 

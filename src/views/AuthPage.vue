@@ -29,9 +29,11 @@
                         :placeholder="translateText('password')"
                         v-model="userPassword"
                     />
-                </div>
 
-                <div class="alert alert-danger" role="alert" v-if="authError">{{ authError }}</div>
+                    <small id="emailHelp" class="form-text text-muted">{{
+                        translateText('passwordHint')
+                    }}</small>
+                </div>
 
                 <div class="form-auth-buttons">
                     <button class="btn btn-primary btn-block" type="submit">
@@ -71,6 +73,8 @@ import FacebookAuthService from '@/service/FacebookAuthService';
 import { TokenData } from '@/index.d.ts';
 import BasePageLayout from '@/views/BasePageLayout.vue';
 
+import eventBus from '@/eventBus';
+
 @Component({
     name: 'AuthPage',
     components: {
@@ -84,8 +88,6 @@ export default class AuthPage extends Vue {
 
     userPassword = '';
 
-    authError = '';
-
     mounted() {
         this.isLoginAction = this.$route.name === 'login';
         this.initGoogleAuth();
@@ -93,8 +95,6 @@ export default class AuthPage extends Vue {
 
     async auth() {
         try {
-            this.authError = '';
-
             const requestData = {
                 email: this.userEmail,
                 password: this.userPassword,
@@ -107,9 +107,7 @@ export default class AuthPage extends Vue {
                 if (userHash) {
                     this.$router.replace({
                         name: 'email_confirmation',
-                        query: {
-                            userHash,
-                        },
+                        query: { userHash },
                     });
                 } else {
                     authService.saveTokenData(tokenData as TokenData);
@@ -121,14 +119,11 @@ export default class AuthPage extends Vue {
 
                 this.$router.replace({
                     name: 'email_confirmation',
-                    query: {
-                        userHash,
-                    },
+                    query: { userHash },
                 });
             }
         } catch (error) {
-            console.error(error);
-            this.authError = error.response.data.error;
+            eventBus.$emit('notify-error', error.response.data.error);
         }
     }
 
@@ -144,11 +139,11 @@ export default class AuthPage extends Vue {
                     await authService.loginWithGoogle(idToken);
                     this.$router.replace({ name: 'home' });
                 } catch (error) {
-                    this.authError = error.message;
+                    eventBus.$emit('notify-error', error.message);
                 }
             },
             (error: any) => {
-                this.authError = error.message;
+                eventBus.$emit('notify-error', error.message);
             },
         );
     }

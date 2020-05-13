@@ -18,3 +18,13 @@ declare global {
         FB: any;
     }
 }
+
+declare module 'vue/types/vue' {
+    interface Vue {
+        translateText: Function;
+    }
+
+    interface VueConstructor {
+        translateText: Function;
+    }
+}
