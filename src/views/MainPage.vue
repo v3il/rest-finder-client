@@ -1,7 +1,7 @@
 <template>
     <base-page-layout>
         <template slot="pageTitle">
-            {{ translateText('emailConfirmation') }}
+            {{ translateText('placesSearch') }}
         </template>
 
         Main page

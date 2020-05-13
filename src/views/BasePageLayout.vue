@@ -6,17 +6,27 @@
                     <slot name="pageTitle"></slot>
                 </h1>
 
-                <div class="page-layout__language-switcher">
-                    <span
-                        v-for="(language, index) in languages"
-                        :key="index"
-                        :class="[
-                            `flag-icon-${language}`,
-                            { 'flag-icon-disabled': currentLanguage === language },
-                        ]"
-                        class="flag-icon"
-                        @click="switchLanguage(language)"
-                    ></span>
+                <div class="page-layout__header-right">
+                    <div class="page-layout__language-switcher">
+                        <span
+                            v-for="(language, index) in languages"
+                            :key="index"
+                            :class="[
+                                `flag-icon-${language}`,
+                                { 'flag-icon-disabled': currentLanguage === language },
+                            ]"
+                            class="flag-icon"
+                            @click="switchLanguage(language)"
+                        ></span>
+                    </div>
+
+                    <ul class="navbar-nav page-layout__logout" v-if="isAuthorized">
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript://" @click.prevent="doLogout">{{
+                                translateText('logout')
+                            }}</a>
+                        </li>
+                    </ul>
                 </div>
             </nav>
         </header>
@@ -41,21 +51,29 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
-import languageService from '@/service/languageService';
 import eventBus from '@/eventBus';
 import { NotificationData } from '@/index.d';
+
+import { namespace } from 'vuex-class';
+
+const languageModule = namespace('language');
+const authModule = namespace('auth');
 
 @Component({
     name: 'BasePageLayout',
 })
 export default class BasePageLayout extends Vue {
-    currentLanguage: string = languageService.getCurrentLanguage();
-
-    languages: string[] = languageService.getAvailableLanguages();
-
     errorData: NotificationData | null = null;
 
     timeoutId = 0;
+
+    @languageModule.State('currentLanguage') currentLanguage!: string;
+
+    @languageModule.State('availableLanguages') languages!: string[];
+
+    @authModule.Action('logout') logout!: Function;
+
+    @authModule.Getter('isAuthorized') isAuthorized!: boolean;
 
     mounted() {
         eventBus.$on('notify-success', (message: string) => {
@@ -74,9 +92,7 @@ export default class BasePageLayout extends Vue {
 
     switchLanguage(language: string) {
         if (language !== this.currentLanguage) {
-            this.currentLanguage = language;
-            languageService.setCurrentLanguage(language);
-
+            this.$store.dispatch('language/setCurrentLanguage', language);
             this.$router.go(0);
         }
     }
@@ -104,6 +120,11 @@ export default class BasePageLayout extends Vue {
             this.errorData = null;
         }, 5000);
     }
+
+    async doLogout() {
+        await this.logout();
+        this.$router.replace({ name: 'login' });
+    }
 }
 </script>
 
@@ -115,6 +136,15 @@ export default class BasePageLayout extends Vue {
         display: flex;
         padding: 3px;
         border-radius: 20px;
+    }
+
+    &__header-right {
+        display: flex;
+        align-items: center;
+    }
+
+    &__logout {
+        margin-left: 24px;
     }
 
     &__main {

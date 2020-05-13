@@ -12,5 +12,7 @@
     "checkConfirmation": "Проверить подтверждение",
     "emailIsNotConfirmed": "Почта не подтверждена",
     "emailHasBeenSentAgain": "Письмо отправлено повторно",
-    "backToLoginPage": "Вернуться на страницу входа"
+    "backToLoginPage": "Вернуться на страницу входа",
+    "logout": "Выход",
+    "placesSearch": "Поиск заведений"
 }

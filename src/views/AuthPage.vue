@@ -44,7 +44,7 @@
                         <font-awesome-icon :icon="['fab', 'google']" />
                     </button>
 
-                    <button class="btn btn-primary" type="button" @click="loginWithFacebook">
+                    <button class="btn btn-primary" type="button" @click="loginWithFB">
                         <font-awesome-icon :icon="['fab', 'facebook-f']" />
                     </button>
                 </div>
@@ -67,13 +67,14 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
-import authService from '@/service/authService';
 import GoogleAuthService from '@/service/GoogleAuthService';
 import FacebookAuthService from '@/service/FacebookAuthService';
-import { TokenData } from '@/index.d.ts';
 import BasePageLayout from '@/views/BasePageLayout.vue';
 
 import eventBus from '@/eventBus';
+import { namespace } from 'vuex-class';
+
+const authModule = namespace('auth');
 
 @Component({
     name: 'AuthPage',
@@ -88,6 +89,16 @@ export default class AuthPage extends Vue {
 
     userPassword = '';
 
+    @authModule.Action('login') login: any;
+
+    @authModule.Action('register') register: any;
+
+    @authModule.Action('loginWithGoogle') loginWithGoogle: any;
+
+    @authModule.Action('loginWithFacebook') loginWithFacebook: any;
+
+    @authModule.Mutation('SET_TOKEN') setToken: any;
+
     mounted() {
         this.isLoginAction = this.$route.name === 'login';
         this.initGoogleAuth();
@@ -101,7 +112,7 @@ export default class AuthPage extends Vue {
             };
 
             if (this.isLoginAction) {
-                const response = await authService.login(requestData);
+                const response = await this.login(requestData);
                 const { tokenData, userHash } = response.data;
 
                 if (userHash) {
@@ -110,11 +121,11 @@ export default class AuthPage extends Vue {
                         query: { userHash },
                     });
                 } else {
-                    authService.saveTokenData(tokenData as TokenData);
+                    this.setToken(tokenData);
                     this.$router.replace({ name: 'home' });
                 }
             } else {
-                const response = await authService.register(requestData);
+                const response = await this.register(requestData);
                 const { userHash } = response.data;
 
                 this.$router.replace({
@@ -136,7 +147,9 @@ export default class AuthPage extends Vue {
             async (googleUser: any) => {
                 try {
                     const idToken = googleUser.getAuthResponse().id_token;
-                    await authService.loginWithGoogle(idToken);
+
+                    await this.loginWithFacebook(idToken);
+
                     this.$router.replace({ name: 'home' });
                 } catch (error) {
                     eventBus.$emit('notify-error', error.message);
@@ -148,12 +161,17 @@ export default class AuthPage extends Vue {
         );
     }
 
-    async loginWithFacebook() {
+    async loginWithFB() {
         const instance: any = FacebookAuthService.getInstance();
 
         instance.login(async (response: any) => {
             const { accessToken, userID: userId } = response.authResponse;
-            await authService.loginWithFacebook(accessToken, userId);
+
+            await this.loginWithFacebook({
+                accessToken,
+                userId,
+            });
+
             this.$router.replace({ name: 'home' });
         });
     }

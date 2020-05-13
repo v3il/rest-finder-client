@@ -5,6 +5,7 @@ import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import languageService from '@/service/languageService';
 import router from './router';
+import store from './store';
 import App from './App.vue';
 
 const ru = require('./translations/ru.json');
@@ -54,5 +55,6 @@ Vue.mixin({
 
 new Vue({
     router,
+    store,
     render: (h) => h(App),
 }).$mount('#app');

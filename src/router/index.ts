@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
-import authService from '@/service/authService';
+import store from '@/store';
+
 import MainPage from '@/views/MainPage.vue';
 import AuthPage from '../views/AuthPage.vue';
 import EmailConfirmationPage from '../views/EmailConfirmationPage.vue';
@@ -41,7 +42,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const isAuthorized = authService.isAuthorized();
+    const isAuthorized = store.getters['auth/isAuthorized'];
 
     if (['login', 'register'].includes(to.name || '') && isAuthorized) {
         return next({ name: 'home' });
