@@ -1,0 +1,43 @@
+import auth from '@/store/auth';
+
+import { UserPublicData } from '@/index.d';
+import eventBus from '@/eventBus';
+import axios from '../axios';
+
+export default {
+    namespaced: true,
+
+    state: {
+        user: null,
+        userDataLoading: false,
+    },
+
+    mutations: {
+        SET_USER_DATA(state: any, userData: UserPublicData) {
+            state.user = userData;
+        },
+
+        SET_LOADING_STATE(state: any, payload: boolean) {
+            state.userDataLoading = payload;
+        },
+    },
+
+    actions: {
+        async loadUserData(context: any) {
+            const token = auth.state.tokenData?.token;
+
+            context.commit('SET_LOADING_STATE', true);
+
+            try {
+                const response = await axios.get(`/user/${token}`);
+                const { userData } = response.data;
+
+                context.commit('SET_USER_DATA', userData);
+            } catch (error) {
+                eventBus.$emit('notify-error', error.response.data.error);
+            }
+
+            context.commit('SET_LOADING_STATE', false);
+        },
+    },
+};

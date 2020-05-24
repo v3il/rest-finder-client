@@ -29,11 +29,12 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 
 import eventBus from '@/eventBus';
-import authService from '@/service/authService';
-import { TokenData } from '@/index.d';
+import { namespace } from 'vuex-class';
 import BasePageLayout from './BasePageLayout.vue';
 
 import axios from '../axios';
+
+const authModule = namespace('auth');
 
 @Component({
     name: 'EmailConfirmationPage',
@@ -43,6 +44,8 @@ import axios from '../axios';
 })
 export default class EmailConfirmationPage extends Vue {
     userHash = '';
+
+    @authModule.Mutation('SET_TOKEN') setToken!: Function;
 
     created() {
         this.userHash = this.$route.query.userHash as string;
@@ -54,7 +57,7 @@ export default class EmailConfirmationPage extends Vue {
             const { tokenData } = response.data;
 
             if (tokenData) {
-                authService.saveTokenData(tokenData as TokenData);
+                this.setToken(tokenData);
                 this.$router.replace({ name: 'home' });
             } else {
                 eventBus.$emit('notify-error', this.translateText('emailIsNotConfirmed'));

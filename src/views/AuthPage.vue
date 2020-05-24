@@ -89,15 +89,15 @@ export default class AuthPage extends Vue {
 
     userPassword = '';
 
-    @authModule.Action('login') login: any;
+    @authModule.Action('login') login!: Function;
 
-    @authModule.Action('register') register: any;
+    @authModule.Action('register') register!: Function;
 
-    @authModule.Action('loginWithGoogle') loginWithGoogle: any;
+    @authModule.Action('loginWithGoogle') loginWithGoogle!: Function;
 
-    @authModule.Action('loginWithFacebook') loginWithFacebook: any;
+    @authModule.Action('loginWithFacebook') loginWithFacebook!: Function;
 
-    @authModule.Mutation('SET_TOKEN') setToken: any;
+    @authModule.Mutation('SET_TOKEN') setToken!: Function;
 
     mounted() {
         this.isLoginAction = this.$route.name === 'login';
@@ -148,8 +148,7 @@ export default class AuthPage extends Vue {
                 try {
                     const idToken = googleUser.getAuthResponse().id_token;
 
-                    await this.loginWithFacebook(idToken);
-
+                    await this.loginWithGoogle(idToken);
                     this.$router.replace({ name: 'home' });
                 } catch (error) {
                     eventBus.$emit('notify-error', error.message);
