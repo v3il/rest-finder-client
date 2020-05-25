@@ -14,5 +14,21 @@
     "emailHasBeenSentAgain": "Письмо отправлено повторно",
     "backToLoginPage": "Вернуться на страницу входа",
     "logout": "Выход",
-    "placesSearch": "Подбор заведений"
+    "placesSearch": "Подбор заведений",
+    "categories": "Категории",
+    "costs": "Стоимость",
+    "companySizes": "Размер компании",
+    "restDurations": "Длительность отдыха",
+    "findPlaces": "Найти заведения",
+    "findWorkingOnly": "Только открытые сейчас",
+    "restTypes": "Тип отдыха",
+    "anyVariant1": "Любой",
+    "anyVariant2": "Любая",
+    "anyVariant3": "Любое",
+    "activeRestType": "Активный",
+    "passiveRestType": "Пассивный",
+    "distanceToPlace": "Расстояние к заведению",
+    "distanceDescription": "до %s км от вас",
+    "distancePermissions": "Для использования данного фильтра необходимо разрешение на доступ к вашему местоположению.",
+    "getDistancePermissions": "Разрешить доступ"
 }

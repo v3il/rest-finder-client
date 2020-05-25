@@ -9,7 +9,7 @@ export default {
 
     state: {
         user: null,
-        userDataLoading: false,
+        dataLoading: false,
     },
 
     mutations: {
@@ -18,12 +18,12 @@ export default {
         },
 
         SET_LOADING_STATE(state: any, payload: boolean) {
-            state.userDataLoading = payload;
+            state.dataLoading = payload;
         },
     },
 
     actions: {
-        async loadUserData(context: any) {
+        async loadUser(context: any) {
             const token = auth.state.tokenData?.token;
 
             context.commit('SET_LOADING_STATE', true);

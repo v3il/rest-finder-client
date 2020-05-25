@@ -15,3 +15,10 @@ export interface UserPublicData {
     isConfirmed: boolean;
     authType: 'local' | 'google' | 'facebook';
 }
+
+export interface FiltersData {
+    categories: any[];
+    costs: any[];
+    restDurations: any[];
+    companySizes: any[];
+}

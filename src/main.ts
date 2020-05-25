@@ -1,5 +1,7 @@
 import Vue from 'vue';
 
+import '../node_modules/leaflet/dist/leaflet';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
