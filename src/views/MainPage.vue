@@ -12,6 +12,14 @@
             <div class="main-page__filters">
                 <div v-if="filtersLoading">Loading...</div>
 
+                <div class="main-page__place-info" v-else-if="selectedPlace">
+                    {{ selectedPlace }}
+
+                    <button class="btn btn-secondary btn-block" @click="closePlaceInfo">
+                        {{ translateText('close') }}
+                    </button>
+                </div>
+
                 <div v-else class="main-page__filters-content">
                     <h6>{{ translateText('categories') }}</h6>
 
@@ -109,7 +117,7 @@
                         }}</label>
                     </div>
 
-                    <button class="btn btn-primary btn-block" type="submit" @click="findPlaces">
+                    <button class="btn btn-primary btn-block" @click="findPlaces">
                         {{ translateText('findPlaces') }}
                     </button>
                 </div>
@@ -132,6 +140,11 @@ import axios from '../axios';
 
 const userModule = namespace('user');
 const filtersModule = namespace('filters');
+
+const cherkasyCenter = {
+    lat: 49.4257529,
+    lng: 32.0580019,
+};
 
 const getGeoPosition = () => {
     return new Promise((resolve, reject) => {
@@ -180,6 +193,10 @@ export default class MainPage extends Vue {
 
     distanceSliderDisabled = true;
 
+    selectedPlace = null;
+
+    selectedPlaceCircle: any = null;
+
     map!: any;
 
     layer!: any;
@@ -210,7 +227,8 @@ export default class MainPage extends Vue {
     async mounted() {
         const { L } = window;
 
-        this.map = L.map('mapid').setView([49.4257529, 32.0580019], 14);
+        this.map = L.map('mapid');
+        this.zoomToPoint(cherkasyCenter.lat, cherkasyCenter.lng, 14);
 
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -273,13 +291,43 @@ export default class MainPage extends Vue {
                 const marker = L.marker([place.latitude, place.longitude]).addTo(this.layer);
 
                 marker.on('click', () => {
-                    console.log(place.id, place.name);
+                    this.selectedPlace = place;
+                    this.zoomToPoint(place.latitude, place.longitude, 18);
+
+                    if (this.selectedPlaceCircle) {
+                        this.selectedPlaceCircle.remove();
+                    }
+
+                    this.selectedPlaceCircle = L.circle([place.latitude, place.longitude], {
+                        radius: 20,
+                    }).addTo(this.map);
+
+                    console.log(this.selectedPlaceCircle);
                 });
             });
 
-            this.map.setView([49.4257529, 32.0580019], 13);
+            this.zoomToPoint(cherkasyCenter.lat, cherkasyCenter.lng, 13);
+
+            eventBus.$emit(
+                'notify-success',
+                this.translateText('loadedPlaceCount', [places.data.places.length]),
+            );
         } catch (error) {
             eventBus.$emit('notify-error', error.response.data.error);
+        }
+    }
+
+    zoomToPoint(latitude: number, longitude: number, zoom: number) {
+        this.map.setView([latitude, longitude], zoom);
+    }
+
+    closePlaceInfo() {
+        this.selectedPlace = null;
+        this.zoomToPoint(cherkasyCenter.lat, cherkasyCenter.lng, 13);
+
+        if (this.selectedPlaceCircle) {
+            this.selectedPlaceCircle.remove();
+            this.selectedPlaceCircle = null;
         }
     }
 }

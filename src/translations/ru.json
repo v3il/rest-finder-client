@@ -30,5 +30,7 @@
     "distanceToPlace": "Расстояние к заведению",
     "distanceDescription": "до %s км от вас",
     "distancePermissions": "Для использования данного фильтра необходимо разрешение на доступ к вашему местоположению.",
-    "getDistancePermissions": "Разрешить доступ"
+    "getDistancePermissions": "Разрешить доступ",
+    "close": "Закрыть",
+    "loadedPlaceCount": "Заведений загружено: %s"
 }
