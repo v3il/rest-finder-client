@@ -13,6 +13,14 @@
                 <span v-if="filtersLoading">{{ translateText('filtersLoading') }}</span>
 
                 <template v-else-if="selectedPlace && reviewsShown">
+                    <button class="btn btn-primary btn-block" @click="addReviewDialog.open()">
+                        {{ translateText('addReview') }}
+                    </button>
+
+                    <button class="btn btn-secondary btn-block" @click="reviewsShown = false">
+                        {{ translateText('close') }}
+                    </button>
+
                     <div class="reviews-block">
                         <div v-if="!reviews" class="reviews-block__loading">
                             <span class="bold-label">{{ translateText('reviewsLoading') }}</span>
@@ -26,17 +34,14 @@
                         </div>
 
                         <div v-else>
-                            {{ reviews }}
+                            <review
+                                v-for="review in reviews"
+                                :review="review"
+                                :key="review.id"
+                                @remove-comment="removeReview(review)"
+                            ></review>
                         </div>
                     </div>
-
-                    <button class="btn btn-primary btn-block" @click="addReviewDialog.open()">
-                        {{ translateText('addReview') }}
-                    </button>
-
-                    <button class="btn btn-secondary btn-block" @click="reviewsShown = false">
-                        {{ translateText('close') }}
-                    </button>
                 </template>
 
                 <template v-else-if="selectedPlace">
@@ -64,18 +69,14 @@
                 {{ translateText('addReviewDialogTitle') }}
             </template>
 
-            <h6>{{ translateText('rating') }}</h6>
-
             <div class="form-group">
                 <label for="reviewRating">{{ translateText('rating') }}</label>
 
-                <select id="reviewRating" v-model="reviewRating" class="form-control">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                <rating-bar
+                    id="reviewRating"
+                    :mark="reviewRating"
+                    @mark-updated="reviewRating = $event"
+                ></rating-bar>
             </div>
 
             <div class="form-group">
@@ -113,10 +114,13 @@ import VueSlider from 'vue-slider-component';
 import { namespace } from 'vuex-class';
 import eventBus from '@/eventBus';
 import { Ref } from 'vue-property-decorator';
+
+import RatingBar from '@/components/RatingBar.vue';
 import BasePageLayout from './BasePageLayout.vue';
 import PlaceInfo from '../components/PlaceInfo.vue';
 import Filters from '../components/Filters.vue';
 import VDialog from '../components/VDialog.vue';
+import Review from '../components/Review.vue';
 
 import axios from '../axios';
 
@@ -136,6 +140,8 @@ const cherkasyCenter = {
         PlaceInfo,
         Filters,
         VDialog,
+        Review,
+        RatingBar,
     },
 })
 export default class MainPage extends Vue {
@@ -275,6 +281,20 @@ export default class MainPage extends Vue {
             this.selectedPlaceCircle = null;
         }
     }
+
+    async removeReview(review: any) {
+        try {
+            await axios.post('/reviews/remove', {
+                reviewId: review.id,
+            });
+
+            this.reviews = this.reviews.filter((item: any) => item !== review);
+
+            eventBus.$emit('notify-success', this.translateText('reviewRemoved'));
+        } catch (error) {
+            eventBus.$emit('notify-error', error.response.data.error);
+        }
+    }
 }
 </script>
 
@@ -304,6 +324,6 @@ export default class MainPage extends Vue {
 }
 
 .reviews-block {
-    margin-bottom: 12px;
+    margin-top: 12px;
 }
 </style>

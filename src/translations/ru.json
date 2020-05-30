@@ -40,8 +40,9 @@
     "allDay": "Весь день",
     "dayOff": "Выходной",
     "filtersLoading": "Загрузка фильтров...",
-    "loadReviews": "Загрузить отзывы",
+    "loadReviews": "Показать отзывы",
     "addReview": "Добавить отзыв",
+    "removeReview": "Удалить отзыв",
     "reviewsDialogTitle": "Отзывы заведения \"%s\"",
     "reviewsLoading": "Загрузка отзывов...",
     "noReviews": "Отзывов нет",
@@ -49,5 +50,7 @@
     "rating": "Оценка",
     "comment": "Комментарий",
     "reviewCommentHint": "Минимум 5 символов",
-    "reviewAdded": "Отзыв успешно добавлен"
+    "reviewAdded": "Отзыв успешно добавлен",
+    "reviewRemoved": "Отзыв успешно удалён",
+    "author": "Автор"
 }

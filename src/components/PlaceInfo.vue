@@ -35,23 +35,24 @@
 
         <div class="place-info__info-block">
             <span class="bold-label">{{ translateText('googleRating') }}:</span>
-
-            {{
+            <rating-bar :mark="placeInfo.googleMeanRating" :disabled="true"></rating-bar>
+            <small class="form-text text-muted">{{
                 translateText('ratingValue', [
                     placeInfo.googleMeanRating.toFixed(1),
                     placeInfo.googleReviewsCount,
                 ])
-            }}
+            }}</small>
         </div>
 
         <div class="place-info__info-block">
             <span class="bold-label">{{ translateText('systemRating') }}:</span>
-            {{
+            <rating-bar :mark="placeInfo.meanRating" :disabled="true"></rating-bar>
+            <small class="form-text text-muted">{{
                 translateText('ratingValue', [
                     placeInfo.meanRating.toFixed(1),
                     placeInfo.reviewsCount,
                 ])
-            }}
+            }}</small>
         </div>
 
         <div class="place-info__info-block">
@@ -74,8 +75,13 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
+import RatingBar from '@/components/RatingBar.vue';
+
 @Component({
     name: 'PlaceInfo',
+    components: {
+        RatingBar,
+    },
 })
 export default class PlaceInfo extends Vue {
     @Prop() placeInfo!: any;

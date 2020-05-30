@@ -138,7 +138,7 @@ const filtersModule = namespace('filters');
     },
 })
 export default class PlaceInfo extends Vue {
-    selectedCategories = [0];
+    selectedCategories = [3];
 
     selectedCost = 0;
 
