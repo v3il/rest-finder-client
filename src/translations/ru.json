@@ -39,6 +39,15 @@
     "businessHoursForToday": "График работы на сегодняшний день",
     "allDay": "Весь день",
     "dayOff": "Выходной",
-    "filtersLoading": "Загрузка фильтров..."
-
+    "filtersLoading": "Загрузка фильтров...",
+    "loadReviews": "Загрузить отзывы",
+    "addReview": "Добавить отзыв",
+    "reviewsDialogTitle": "Отзывы заведения \"%s\"",
+    "reviewsLoading": "Загрузка отзывов...",
+    "noReviews": "Отзывов нет",
+    "addReviewDialogTitle": "Добавление отзыва",
+    "rating": "Оценка",
+    "comment": "Комментарий",
+    "reviewCommentHint": "Минимум 5 символов",
+    "reviewAdded": "Отзыв успешно добавлен"
 }

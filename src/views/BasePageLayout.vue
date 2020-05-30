@@ -159,7 +159,7 @@ export default class BasePageLayout extends Vue {
         padding: 20px 24px;
         margin: 0;
         border-radius: 0;
-        z-index: 9999;
+        z-index: 10001;
     }
 }
 

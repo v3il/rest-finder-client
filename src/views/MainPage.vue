@@ -12,15 +12,96 @@
             <div class="main-page__filters">
                 <span v-if="filtersLoading">{{ translateText('filtersLoading') }}</span>
 
-                <place-info
-                    v-else-if="selectedPlace"
-                    :place-info="selectedPlace"
-                    @close-info="closePlaceInfo"
-                ></place-info>
+                <template v-else-if="selectedPlace && reviewsShown">
+                    <div class="reviews-block">
+                        <div v-if="!reviews" class="reviews-block__loading">
+                            <span class="bold-label">{{ translateText('reviewsLoading') }}</span>
+                        </div>
 
-                <filters v-else @search-places="findPlaces" />
+                        <div
+                            v-else-if="reviews && reviews.length === 0"
+                            class="reviews-block__no-reviews"
+                        >
+                            <span class="bold-label">{{ translateText('noReviews') }}</span>
+                        </div>
+
+                        <div v-else>
+                            {{ reviews }}
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-block" @click="addReviewDialog.open()">
+                        {{ translateText('addReview') }}
+                    </button>
+
+                    <button class="btn btn-secondary btn-block" @click="reviewsShown = false">
+                        {{ translateText('close') }}
+                    </button>
+                </template>
+
+                <template v-else-if="selectedPlace">
+                    <place-info :place-info="selectedPlace"></place-info>
+
+                    <button class="btn btn-primary btn-block" @click="loadReviews">
+                        {{ translateText('loadReviews') }}
+                    </button>
+
+                    <button class="btn btn-secondary btn-block" @click="closePlaceInfo">
+                        {{ translateText('close') }}
+                    </button>
+                </template>
+
+                <filters
+                    v-show="!filtersLoading && !selectedPlace"
+                    @search-places="findPlaces"
+                    :places-loading="placesLoading"
+                />
             </div>
         </div>
+
+        <v-dialog ref="addReviewDialog" :max-width="600">
+            <template slot="header">
+                {{ translateText('addReviewDialogTitle') }}
+            </template>
+
+            <h6>{{ translateText('rating') }}</h6>
+
+            <div class="form-group">
+                <label for="reviewRating">{{ translateText('rating') }}</label>
+
+                <select id="reviewRating" v-model="reviewRating" class="form-control">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="reviewComment">{{ translateText('comment') }}</label>
+
+                <textarea
+                    class="form-control"
+                    id="reviewComment"
+                    rows="10"
+                    maxlength="1000"
+                    v-model="reviewComment"
+                ></textarea>
+
+                <small class="form-text text-muted">{{ translateText('reviewCommentHint') }}</small>
+            </div>
+
+            <template slot="footer">
+                <button class="btn btn-primary" @click="addReview">
+                    {{ translateText('addReview') }}
+                </button>
+
+                <button class="btn btn-secondary" @click="addReviewDialog.triggerClose()">
+                    {{ translateText('close') }}
+                </button>
+            </template>
+        </v-dialog>
     </base-page-layout>
 </template>
 
@@ -31,9 +112,11 @@ import VueSlider from 'vue-slider-component';
 
 import { namespace } from 'vuex-class';
 import eventBus from '@/eventBus';
+import { Ref } from 'vue-property-decorator';
 import BasePageLayout from './BasePageLayout.vue';
 import PlaceInfo from '../components/PlaceInfo.vue';
 import Filters from '../components/Filters.vue';
+import VDialog from '../components/VDialog.vue';
 
 import axios from '../axios';
 
@@ -52,6 +135,7 @@ const cherkasyCenter = {
         VueSlider,
         PlaceInfo,
         Filters,
+        VDialog,
     },
 })
 export default class MainPage extends Vue {
@@ -61,9 +145,23 @@ export default class MainPage extends Vue {
 
     @filtersModule.State('dataLoading') filtersLoading!: boolean;
 
-    selectedPlace = null;
+    @Ref() addReviewDialog!: any;
+
+    selectedPlace: any = null;
 
     selectedPlaceCircle: any = null;
+
+    placesLoading = false;
+
+    reviews: any = null;
+
+    reviewsLoading = false;
+
+    reviewsShown = false;
+
+    reviewRating = 3;
+
+    reviewComment = '';
 
     map!: any;
 
@@ -91,6 +189,8 @@ export default class MainPage extends Vue {
         const { L } = window;
 
         this.layer.clearLayers();
+
+        this.placesLoading = true;
 
         try {
             const places = await axios.get('/places', { params });
@@ -123,6 +223,41 @@ export default class MainPage extends Vue {
         } catch (error) {
             eventBus.$emit('notify-error', error.response.data.error);
         }
+
+        this.placesLoading = false;
+    }
+
+    async loadReviews() {
+        this.reviewsShown = true;
+
+        if (!this.reviews) {
+            try {
+                const response = await axios.get('/reviews', {
+                    params: { placeId: this.selectedPlace.id },
+                });
+
+                this.reviews = response.data.reviews;
+            } catch (error) {
+                eventBus.$emit('notify-error', error.response.data.error);
+            }
+        }
+    }
+
+    async addReview() {
+        try {
+            const response = await axios.post('/reviews/add', {
+                placeId: this.selectedPlace.id,
+                comment: this.reviewComment,
+                rating: +this.reviewRating,
+            });
+
+            this.reviews.push(response.data.review);
+            this.addReviewDialog.triggerClose();
+
+            eventBus.$emit('notify-success', this.translateText('reviewAdded'));
+        } catch (error) {
+            eventBus.$emit('notify-error', error.response.data.error);
+        }
     }
 
     zoomToPoint(latitude: number, longitude: number, zoom: number) {
@@ -130,7 +265,9 @@ export default class MainPage extends Vue {
     }
 
     closePlaceInfo() {
+        this.reviews = null;
         this.selectedPlace = null;
+
         this.zoomToPoint(cherkasyCenter.lat, cherkasyCenter.lng, 13);
 
         if (this.selectedPlaceCircle) {
@@ -164,5 +301,9 @@ export default class MainPage extends Vue {
     &__categories-cb {
         margin-bottom: 0;
     }
+}
+
+.reviews-block {
+    margin-bottom: 12px;
 }
 </style>

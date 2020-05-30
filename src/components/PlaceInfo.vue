@@ -1,31 +1,31 @@
 <template>
     <div class="place-info">
-        <h5>{{ placeInfo.name }}</h5>
+        <h5>{{ placeInfo.name }} ({{ placeInfo.id }})</h5>
 
         <span
-            class="badge badge-secondary"
+            class="badge badge-primary"
             v-for="category in placeInfo.categories"
             :key="category.id"
             >{{ category.name }}</span
         >
 
         <div class="place-info__info-block">
-            <span class="place-info__title">{{ translateText('costs') }}:</span>
+            <span class="bold-label">{{ translateText('costs') }}:</span>
             {{ placeInfo.restCost.name }}
         </div>
 
         <div class="place-info__info-block">
-            <span class="place-info__title">{{ translateText('restDurations') }}:</span>
+            <span class="bold-label">{{ translateText('restDurations') }}:</span>
             {{ placeInfo.restDuration.name }}
         </div>
 
         <div class="place-info__info-block">
-            <span class="place-info__title">{{ translateText('companySizes') }}:</span>
+            <span class="bold-label">{{ translateText('companySizes') }}:</span>
             {{ placeInfo.companySize.name }}
         </div>
 
         <div class="place-info__info-block">
-            <span class="place-info__title">{{ translateText('restTypes') }}:</span>
+            <span class="bold-label">{{ translateText('restTypes') }}:</span>
             {{
                 placeInfo.isActiveRest
                     ? translateText('activeRestType')
@@ -34,7 +34,7 @@
         </div>
 
         <div class="place-info__info-block">
-            <span class="place-info__title">{{ translateText('googleRating') }}:</span>
+            <span class="bold-label">{{ translateText('googleRating') }}:</span>
 
             {{
                 translateText('ratingValue', [
@@ -45,7 +45,7 @@
         </div>
 
         <div class="place-info__info-block">
-            <span class="place-info__title">{{ translateText('systemRating') }}:</span>
+            <span class="bold-label">{{ translateText('systemRating') }}:</span>
             {{
                 translateText('ratingValue', [
                     placeInfo.meanRating.toFixed(1),
@@ -55,7 +55,7 @@
         </div>
 
         <div class="place-info__info-block">
-            <span class="place-info__title">{{ translateText('businessHoursForToday') }}:</span>
+            <span class="bold-label">{{ translateText('businessHoursForToday') }}:</span>
             {{
                 placeInfo.workingPeriod
                     ? placeInfo.workingPeriod.worksAllDay
@@ -66,10 +66,6 @@
                     : 'No data'
             }}
         </div>
-
-        <button class="btn btn-primary btn-block" @click="$emit('close-info')">
-            {{ translateText('close') }}
-        </button>
     </div>
 </template>
 

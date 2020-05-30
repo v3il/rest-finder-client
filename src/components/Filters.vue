@@ -96,7 +96,11 @@
             }}</label>
         </div>
 
-        <button class="btn btn-primary btn-block" @click="emitPlacesSearch">
+        <button
+            class="btn btn-primary btn-block"
+            @click="emitPlacesSearch"
+            :disabled="placesLoading"
+        >
             {{ translateText('findPlaces') }}
         </button>
     </div>
@@ -110,6 +114,7 @@ import VueSlider from 'vue-slider-component';
 import { FiltersData } from '@/index.d';
 import { namespace } from 'vuex-class';
 import eventBus from '@/eventBus';
+import { Prop } from 'vue-property-decorator';
 
 const getGeoPosition = () => {
     return new Promise((resolve, reject) => {
@@ -145,13 +150,15 @@ export default class PlaceInfo extends Vue {
 
     selectedDistance = 0;
 
-    findWorkingOnly = true;
+    findWorkingOnly = false;
 
     distanceFilterAllowed = navigator.geolocation;
 
     distanceSliderDisabled = true;
 
     @filtersModule.State('filters') filters!: FiltersData;
+
+    @Prop() placesLoading!: boolean;
 
     get distanceString() {
         return this.selectedDistance === 0
