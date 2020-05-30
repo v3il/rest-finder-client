@@ -93,7 +93,7 @@ export default class BasePageLayout extends Vue {
     switchLanguage(language: string) {
         if (language !== this.currentLanguage) {
             this.$store.dispatch('language/setCurrentLanguage', language);
-            this.$router.go(0);
+            // this.$router.go(0);
         }
     }
 

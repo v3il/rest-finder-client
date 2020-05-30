@@ -32,5 +32,13 @@
     "distancePermissions": "Для использования данного фильтра необходимо разрешение на доступ к вашему местоположению.",
     "getDistancePermissions": "Разрешить доступ",
     "close": "Закрыть",
-    "loadedPlaceCount": "Заведений загружено: %s"
+    "loadedPlaceCount": "Заведений найдено: %s",
+    "googleRating": "Рейтинг заведения (Google)",
+    "systemRating": "Рейтинг заведения",
+    "ratingValue": "%s/5.0, оценок: %s",
+    "businessHoursForToday": "График работы на сегодняшний день",
+    "allDay": "Весь день",
+    "dayOff": "Выходной",
+    "filtersLoading": "Загрузка фильтров..."
+
 }

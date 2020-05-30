@@ -10,117 +10,15 @@
             </div>
 
             <div class="main-page__filters">
-                <div v-if="filtersLoading">Loading...</div>
+                <span v-if="filtersLoading">{{ translateText('filtersLoading') }}</span>
 
-                <div class="main-page__place-info" v-else-if="selectedPlace">
-                    {{ selectedPlace }}
+                <place-info
+                    v-else-if="selectedPlace"
+                    :place-info="selectedPlace"
+                    @close-info="closePlaceInfo"
+                ></place-info>
 
-                    <button class="btn btn-secondary btn-block" @click="closePlaceInfo">
-                        {{ translateText('close') }}
-                    </button>
-                </div>
-
-                <div v-else class="main-page__filters-content">
-                    <h6>{{ translateText('categories') }}</h6>
-
-                    <div class="form-group">
-                        <select
-                            multiple
-                            class="form-control"
-                            :size="filters.categories.length / 2"
-                            v-model="selectedCategories"
-                        >
-                            <option
-                                v-for="category in filters.categories"
-                                :key="category.id"
-                                :value="category.id"
-                                >{{ category.name }}</option
-                            >
-                        </select>
-                    </div>
-
-                    <h6>{{ translateText('costs') }}</h6>
-
-                    <div class="form-group">
-                        <select class="form-control" v-model="selectedCost">
-                            <option v-for="cost in filters.costs" :value="cost.id" :key="cost.id">{{
-                                cost.name
-                            }}</option>
-                        </select>
-                    </div>
-
-                    <h6>{{ translateText('companySizes') }}</h6>
-
-                    <div class="form-group">
-                        <select class="form-control" v-model="selectedCompanySize">
-                            <option
-                                v-for="companySize in filters.companySizes"
-                                :value="companySize.id"
-                                :key="companySize.id"
-                                >{{ companySize.name }}</option
-                            >
-                        </select>
-                    </div>
-
-                    <h6>{{ translateText('restDurations') }}</h6>
-
-                    <div class="form-group">
-                        <select class="form-control" v-model="selectedRestDuration">
-                            <option
-                                v-for="restDuration in filters.restDurations"
-                                :value="restDuration.id"
-                                :key="restDuration.id"
-                                >{{ restDuration.name }}</option
-                            >
-                        </select>
-                    </div>
-
-                    <h6>{{ translateText('restTypes') }}</h6>
-
-                    <div class="form-group">
-                        <select class="form-control" v-model="selectedRestType">
-                            <option :value="0">{{ translateText('anyVariant1') }}</option>
-                            <option :value="1">{{ translateText('activeRestType') }}</option>
-                            <option :value="2">{{ translateText('passiveRestType') }}</option>
-                        </select>
-                    </div>
-
-                    <h6>
-                        {{ translateText('distanceToPlace') }}
-                        <span class="badge badge-secondary">{{ distanceString }}</span>
-                    </h6>
-
-                    <div class="form-group" v-if="distanceFilterAllowed">
-                        <vue-slider
-                            v-model="selectedDistance"
-                            :min="0"
-                            :max="6"
-                            :interval="0.5"
-                            :disabled="distanceSliderDisabled"
-                        />
-
-                        <small class="form-text text-muted" v-if="distanceSliderDisabled"
-                            >{{ translateText('distancePermissions') }}
-                        </small>
-                    </div>
-
-                    <div class="form-group form-check">
-                        <input
-                            type="checkbox"
-                            class="form-check-input"
-                            id="working-only"
-                            v-model="findWorkingOnly"
-                        />
-
-                        <label class="form-check-label" for="working-only">{{
-                            translateText('findWorkingOnly')
-                        }}</label>
-                    </div>
-
-                    <button class="btn btn-primary btn-block" @click="findPlaces">
-                        {{ translateText('findPlaces') }}
-                    </button>
-                </div>
+                <filters v-else @search-places="findPlaces" />
             </div>
         </div>
     </base-page-layout>
@@ -132,9 +30,10 @@ import Component from 'vue-class-component';
 import VueSlider from 'vue-slider-component';
 
 import { namespace } from 'vuex-class';
-import { FiltersData } from '@/index.d';
 import eventBus from '@/eventBus';
 import BasePageLayout from './BasePageLayout.vue';
+import PlaceInfo from '../components/PlaceInfo.vue';
+import Filters from '../components/Filters.vue';
 
 import axios from '../axios';
 
@@ -146,24 +45,13 @@ const cherkasyCenter = {
     lng: 32.0580019,
 };
 
-const getGeoPosition = () => {
-    return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                resolve(position.coords);
-            },
-            (error) => {
-                reject(error);
-            },
-        );
-    });
-};
-
 @Component({
     name: 'MainPage',
     components: {
         BasePageLayout,
         VueSlider,
+        PlaceInfo,
+        Filters,
     },
 })
 export default class MainPage extends Vue {
@@ -171,27 +59,7 @@ export default class MainPage extends Vue {
 
     @filtersModule.Action('loadFilters') loadFilters!: Function;
 
-    @filtersModule.State('filters') filters!: FiltersData;
-
     @filtersModule.State('dataLoading') filtersLoading!: boolean;
-
-    selectedCategories = [0];
-
-    selectedCost = 0;
-
-    selectedRestDuration = 0;
-
-    selectedCompanySize = 0;
-
-    selectedRestType = 0;
-
-    selectedDistance = 0;
-
-    findWorkingOnly = true;
-
-    distanceFilterAllowed = navigator.geolocation;
-
-    distanceSliderDisabled = true;
 
     selectedPlace = null;
 
@@ -201,27 +69,9 @@ export default class MainPage extends Vue {
 
     layer!: any;
 
-    get distanceString() {
-        return this.selectedDistance === 0
-            ? this.translateText('anyVariant3')
-            : this.translateText('distanceDescription', [this.selectedDistance]);
-    }
-
     async created() {
         this.loadUser();
         this.loadFilters();
-
-        if (this.distanceFilterAllowed) {
-            const queryResult = await navigator.permissions.query({ name: 'geolocation' });
-
-            this.distanceSliderDisabled = queryResult.state !== 'granted';
-
-            queryResult.onchange = () => {
-                this.distanceSliderDisabled = queryResult.state !== 'granted';
-            };
-
-            getGeoPosition();
-        }
     }
 
     async mounted() {
@@ -237,50 +87,8 @@ export default class MainPage extends Vue {
         this.layer = L.layerGroup().addTo(this.map);
     }
 
-    async findPlaces() {
+    async findPlaces(params: any) {
         const { L } = window;
-
-        const params: any = {};
-
-        const selectedCategories = this.selectedCategories.filter((categoryId) => categoryId > 0);
-
-        if (selectedCategories.length) {
-            params.categories = selectedCategories;
-        }
-
-        if (this.selectedCost > 0) {
-            params.restCost = this.selectedCost;
-        }
-
-        if (this.selectedRestDuration > 0) {
-            params.restDuration = this.selectedRestDuration;
-        }
-
-        if (this.selectedCompanySize > 0) {
-            params.companySize = this.selectedCompanySize;
-        }
-
-        if (this.selectedRestType > 0) {
-            params.restType = this.selectedRestType === 1;
-        }
-
-        if (this.distanceFilterAllowed && !this.distanceSliderDisabled) {
-            try {
-                if (this.selectedDistance > 0) {
-                    const geoPosition = (await getGeoPosition()) as Coordinates;
-
-                    params.distance = this.selectedDistance;
-                    params.userLatitude = geoPosition.latitude;
-                    params.userLongitude = geoPosition.longitude;
-                }
-            } catch (error) {
-                eventBus.$emit('notify-error', error.message);
-            }
-        }
-
-        if (this.findWorkingOnly) {
-            params.workingOnly = true;
-        }
 
         this.layer.clearLayers();
 

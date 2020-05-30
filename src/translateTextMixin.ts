@@ -29,7 +29,7 @@ export default (textId: string, replacements: (string | number)[] = []): string 
     }
 
     replacements.forEach((replacement) => {
-        text = text.replace('%s', replacement.toString());
+        text = text.replace('%s', replacement);
     });
 
     return text;
