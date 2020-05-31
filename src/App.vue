@@ -31,4 +31,8 @@
     font-weight: 700;
     font-size: 0.9em;
 }
+
+.left-button {
+    margin-right: 12px;
+}
 </style>

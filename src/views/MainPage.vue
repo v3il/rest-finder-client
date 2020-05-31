@@ -4,9 +4,17 @@
             {{ translateText('placesSearch') }}
         </template>
 
-        <template slot="topMenu"
-            ><button class="btn btn-success btn-sm" @click="showAddPlaceDialog">
-                {{ translateText('findPlaces') }}
+        <template slot="topMenu">
+            <button class="btn btn-success btn-sm left-button" @click="showAddPlaceDialog">
+                {{ translateText('addPlace') }}
+            </button>
+
+            <button
+                class="btn btn-success btn-sm"
+                @click="$router.push('/admin')"
+                v-if="user && user.isAdmin"
+            >
+                {{ translateText('controlPanel') }}
             </button>
         </template>
 
@@ -100,7 +108,7 @@
             </div>
 
             <template slot="footer">
-                <button class="btn btn-primary" @click="addReview">
+                <button class="btn btn-primary left-button" @click="addReview">
                     {{ translateText('addReview') }}
                 </button>
 
@@ -113,14 +121,14 @@
         <template v-if="addPlacePopupShown">
             <v-dialog ref="addPlaceDialog" :max-width="1000" @close="addPlacePopupShown = false">
                 <template slot="header">
-                    {{ translateText('addReviewDialogTitle') }}
+                    {{ translateText('addPlaceDialogTitle') }}
                 </template>
 
-                <place-form></place-form>
+                <place-form ref="placeForm"></place-form>
 
                 <template slot="footer">
-                    <button class="btn btn-primary" @click="addReview">
-                        {{ translateText('addReview') }}
+                    <button class="btn btn-primary left-button" @click="addPlace">
+                        {{ translateText('addPlace') }}
                     </button>
 
                     <button class="btn btn-secondary" @click="addPlaceDialog.triggerClose()">
@@ -142,6 +150,7 @@ import eventBus from '@/eventBus';
 import { Ref } from 'vue-property-decorator';
 
 import RatingBar from '@/components/RatingBar.vue';
+import { UserPublicData } from '@/index.d';
 import BasePageLayout from './BasePageLayout.vue';
 import PlaceInfo from '../components/PlaceInfo.vue';
 import Filters from '../components/Filters.vue';
@@ -177,11 +186,15 @@ export default class MainPage extends Vue {
 
     @filtersModule.Action('loadFilters') loadFilters!: Function;
 
+    @userModule.State('user') user!: UserPublicData;
+
     @filtersModule.State('dataLoading') filtersLoading!: boolean;
 
     @Ref() addReviewDialog!: any;
 
     @Ref() addPlaceDialog!: any;
+
+    @Ref() placeForm!: any;
 
     selectedPlace: any = null;
 
@@ -208,6 +221,14 @@ export default class MainPage extends Vue {
     async created() {
         this.loadUser();
         this.loadFilters();
+
+        const r = await axios.get('/places', {
+            params: {
+                confirmed: false,
+            },
+        });
+
+        console.log(r.data.places);
     }
 
     async mounted() {
@@ -332,8 +353,21 @@ export default class MainPage extends Vue {
         this.addPlacePopupShown = true;
 
         this.$nextTick(() => {
-            (this.$refs.addPlaceDialog as any).open();
+            this.addPlaceDialog.open();
         });
+    }
+
+    async addPlace() {
+        const placeData = this.placeForm.getPlaceData();
+
+        try {
+            await axios.post('/places/add', placeData);
+            this.addPlaceDialog.triggerClose();
+
+            eventBus.$emit('notify-success', this.translateText('placeAdded'));
+        } catch (error) {
+            eventBus.$emit('notify-error', error.response.data.error);
+        }
     }
 }
 </script>

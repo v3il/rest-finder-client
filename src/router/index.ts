@@ -4,6 +4,7 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import store from '@/store';
 
 import MainPage from '@/views/MainPage.vue';
+import ControlPanel from '@/views/ControlPanel.vue';
 import AuthPage from '../views/AuthPage.vue';
 import EmailConfirmationPage from '../views/EmailConfirmationPage.vue';
 
@@ -33,6 +34,15 @@ const routes: Array<RouteConfig> = [
             requiresAuth: true,
         },
     },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: ControlPanel,
+        meta: {
+            requiresAuth: true,
+            forAdmin: true,
+        },
+    },
 ];
 
 const router = new VueRouter({
@@ -41,8 +51,13 @@ const router = new VueRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     const isAuthorized = store.getters['auth/isAuthorized'];
+    await store.dispatch('user/loadUser');
+
+    const user = store.getters['user/u'];
+
+    console.log(user);
 
     if (['login', 'register'].includes(to.name || '') && isAuthorized) {
         return next({ name: 'home' });
@@ -53,6 +68,12 @@ router.beforeEach((to, from, next) => {
             next();
         } else {
             next({ name: 'login' });
+        }
+    } else if (to.meta.forAdmin) {
+        if (user.isAdmin) {
+            next();
+        } else {
+            next({ name: 'home' });
         }
     } else {
         next();

@@ -12,6 +12,13 @@ export default {
         dataLoading: false,
     },
 
+    getters: {
+        u(state: any) {
+            console.log(1);
+            return state.user;
+        },
+    },
+
     mutations: {
         SET_USER_DATA(state: any, userData: UserPublicData) {
             state.user = userData;

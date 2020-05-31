@@ -7,17 +7,12 @@
         </div>
 
         <div class="form-group">
-            <label for="place-name">{{ translateText('placeLocation') }}</label>
-            <div id="placeFormMap" class="place-form__map"></div>
-        </div>
-
-        <div class="form-group">
             <label for="place-name">{{ translateText('categories') }}</label>
 
             <select
                 multiple
                 class="form-control"
-                :size="filters.categories.length / 2"
+                :size="filters.categories.length"
                 v-model="categories"
             >
                 <option
@@ -68,10 +63,15 @@
         <div class="form-group">
             <label for="place-name">{{ translateText('restTypes') }}</label>
 
-            <select class="form-control" v-model="restType">
-                <option :value="1">{{ translateText('activeRestType') }}</option>
-                <option :value="2">{{ translateText('passiveRestType') }}</option>
+            <select class="form-control" v-model="isActiveRest">
+                <option :value="true">{{ translateText('activeRestType') }}</option>
+                <option :value="false">{{ translateText('passiveRestType') }}</option>
             </select>
+        </div>
+
+        <div class="form-group">
+            <label for="place-name">{{ translateText('placeLocation') }}</label>
+            <div id="placeFormMap" class="place-form__map"></div>
         </div>
 
         <div class="form-group">
@@ -187,7 +187,7 @@ export default class PlaceForm extends Vue {
 
     categories = [1];
 
-    restType = 1;
+    isActiveRest = true;
 
     periods: any = [];
 
@@ -215,43 +215,44 @@ export default class PlaceForm extends Vue {
 
         if (this.place) {
             this.placeName = this.place.name;
-            this.placeLatitude = this.place.latitude;
-            this.placeLongitude = this.place.longitude;
         }
+
+        this.placeLatitude = this.place?.latitude || cherkasyCenter.lat;
+        this.placeLongitude = this.place?.longitude || cherkasyCenter.lng;
     }
 
     mounted() {
         const { L } = window;
 
-        this.map = L.map('placeFormMap');
-        this.zoomToPoint(cherkasyCenter.lat, cherkasyCenter.lng, 14);
-
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(this.map);
-
-        this.layer = L.layerGroup().addTo(this.map);
-
-        this.marker = L.marker([
-            this.placeLatitude || cherkasyCenter.lat,
-            this.placeLongitude || cherkasyCenter.lng,
-        ]).addTo(this.layer);
-
-        L.circle([cherkasyCenter.lat, cherkasyCenter.lng], {
-            radius: 1000 * 6,
-        }).addTo(this.map);
-
-        this.map.on('click', (data: any) => {
-            const clickPoint = data.latlng;
-
-            if (this.isPointInsideCherkasy(clickPoint)) {
-                this.marker.setLatLng(clickPoint);
-            } else {
-                eventBus.$emit('notify-error', this.translateText('placeIsNotInCherkasy'));
-            }
-        });
-
         this.$nextTick(() => {
+            this.map = L.map('placeFormMap');
+            this.zoomToPoint(cherkasyCenter.lat, cherkasyCenter.lng, 14);
+
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution:
+                    '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(this.map);
+
+            this.layer = L.layerGroup().addTo(this.map);
+            this.marker = L.marker([this.placeLatitude, this.placeLongitude]).addTo(this.layer);
+
+            L.circle([cherkasyCenter.lat, cherkasyCenter.lng], {
+                radius: 1000 * 6,
+            }).addTo(this.map);
+
+            this.map.on('click', (data: any) => {
+                const clickPoint = data.latlng;
+
+                if (this.isPointInsideCherkasy(clickPoint)) {
+                    this.marker.setLatLng(clickPoint);
+
+                    this.placeLatitude = clickPoint.lat;
+                    this.placeLongitude = clickPoint.lng;
+                } else {
+                    eventBus.$emit('notify-error', this.translateText('placeIsNotInCherkasy'));
+                }
+            });
+
             // eslint-disable-next-line no-underscore-dangle
             this.map._onResize();
         });
@@ -276,6 +277,31 @@ export default class PlaceForm extends Vue {
             Math.sqrt(latitudeDelta * latitudeDelta + longitudeDelta * longitudeDelta) <=
             cherkasyRadius
         );
+    }
+
+    getPlaceData() {
+        const periods = this.periods.map((period: any) => {
+            const timeStart = Number(period.timeStart.replace(':', ''));
+            const timeEnd = Number(period.timeEnd.replace(':', ''));
+
+            return {
+                ...period,
+                timeStart,
+                timeEnd,
+            };
+        });
+
+        return {
+            periods,
+            name: this.placeName,
+            latitude: this.placeLatitude,
+            longitude: this.placeLongitude,
+            restDuration: this.restDuration,
+            restCost: this.restCost,
+            companySize: this.companySize,
+            isActiveRest: this.isActiveRest,
+            categoryIds: this.categories,
+        };
     }
 }
 </script>

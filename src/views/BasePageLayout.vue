@@ -7,7 +7,9 @@
                 </h1>
 
                 <div class="page-layout__header-right">
-                    <slot name="topMenu"></slot>
+                    <div class="page-layout__top-menu">
+                        <slot name="topMenu"></slot>
+                    </div>
 
                     <div class="page-layout__language-switcher">
                         <span
@@ -143,6 +145,10 @@ export default class BasePageLayout extends Vue {
     &__header-right {
         display: flex;
         align-items: center;
+    }
+
+    &__top-menu {
+        margin-right: 24px;
     }
 
     &__logout {
