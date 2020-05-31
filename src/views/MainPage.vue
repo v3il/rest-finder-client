@@ -4,6 +4,12 @@
             {{ translateText('placesSearch') }}
         </template>
 
+        <template slot="topMenu"
+            ><button class="btn btn-success btn-sm" @click="showAddPlaceDialog">
+                {{ translateText('findPlaces') }}
+            </button>
+        </template>
+
         <div class="main-page">
             <div class="main-page__map">
                 <div id="mapid" style=""></div>
@@ -103,6 +109,26 @@
                 </button>
             </template>
         </v-dialog>
+
+        <template v-if="addPlacePopupShown">
+            <v-dialog ref="addPlaceDialog" :max-width="1000" @close="addPlacePopupShown = false">
+                <template slot="header">
+                    {{ translateText('addReviewDialogTitle') }}
+                </template>
+
+                <place-form></place-form>
+
+                <template slot="footer">
+                    <button class="btn btn-primary" @click="addReview">
+                        {{ translateText('addReview') }}
+                    </button>
+
+                    <button class="btn btn-secondary" @click="addPlaceDialog.triggerClose()">
+                        {{ translateText('close') }}
+                    </button>
+                </template>
+            </v-dialog>
+        </template>
     </base-page-layout>
 </template>
 
@@ -121,6 +147,7 @@ import PlaceInfo from '../components/PlaceInfo.vue';
 import Filters from '../components/Filters.vue';
 import VDialog from '../components/VDialog.vue';
 import Review from '../components/Review.vue';
+import PlaceForm from '../components/PlaceForm.vue';
 
 import axios from '../axios';
 
@@ -142,6 +169,7 @@ const cherkasyCenter = {
         VDialog,
         Review,
         RatingBar,
+        PlaceForm,
     },
 })
 export default class MainPage extends Vue {
@@ -152,6 +180,8 @@ export default class MainPage extends Vue {
     @filtersModule.State('dataLoading') filtersLoading!: boolean;
 
     @Ref() addReviewDialog!: any;
+
+    @Ref() addPlaceDialog!: any;
 
     selectedPlace: any = null;
 
@@ -168,6 +198,8 @@ export default class MainPage extends Vue {
     reviewRating = 3;
 
     reviewComment = '';
+
+    addPlacePopupShown = false;
 
     map!: any;
 
@@ -295,6 +327,14 @@ export default class MainPage extends Vue {
             eventBus.$emit('notify-error', error.response.data.error);
         }
     }
+
+    showAddPlaceDialog() {
+        this.addPlacePopupShown = true;
+
+        this.$nextTick(() => {
+            (this.$refs.addPlaceDialog as any).open();
+        });
+    }
 }
 </script>
 
@@ -312,7 +352,7 @@ export default class MainPage extends Vue {
     }
 
     &__filters {
-        flex-basis: 400px;
+        flex-basis: 500px;
         padding: 12px 18px;
         overflow-y: auto;
         overflow-x: hidden;

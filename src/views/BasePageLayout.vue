@@ -7,6 +7,8 @@
                 </h1>
 
                 <div class="page-layout__header-right">
+                    <slot name="topMenu"></slot>
+
                     <div class="page-layout__language-switcher">
                         <span
                             v-for="(language, index) in languages"

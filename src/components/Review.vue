@@ -47,7 +47,7 @@ export default class Review extends Vue {
         const date = new Date(this.review.created * 1000);
 
         const day = this.formatNumber(date.getDate());
-        const month = this.formatNumber(date.getMonth());
+        const month = this.formatNumber(date.getMonth() + 1);
         const year = date.getFullYear();
         const hours = this.formatNumber(date.getHours());
         const minutes = this.formatNumber(date.getMinutes());
