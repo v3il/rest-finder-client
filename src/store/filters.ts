@@ -14,6 +14,7 @@ export default {
         },
 
         dataLoading: false,
+        dataLoaded: false,
     },
 
     mutations: {
@@ -28,6 +29,10 @@ export default {
 
     actions: {
         async loadFilters(context: any) {
+            if (context.state.filters.categories.length) {
+                return;
+            }
+
             context.commit('SET_LOADING_STATE', true);
 
             try {

@@ -203,22 +203,55 @@ export default class PlaceForm extends Vue {
 
     created() {
         this.periods = Array.from({ length: 7 }).map((_, index) => {
+            const timeStart = this.place?.workingPeriod?.timeStart || '09:00';
+            const timeEnd = this.place?.workingPeriod?.timeEnd || '18:00';
+
+            // if (this.place?.workingPeriod) {
+            //     const hours = Math.floor(this.place.workingPeriod.startTime / 100);
+            //     const minutes = this.place.workingPeriod.timeStart % 100;
+            //
+            //     timeStart = `${this.formatNumber(hours)}:${this.formatNumber(minutes)}`;
+            // }
+            //
+            // let timeEnd = '18:00';
+            //
+            console.log(this.place?.workingPeriod);
+            //
+            // if (this.place?.workingPeriod) {
+            //     const hours = parseInt((this.place.workingPeriod.timeEnd / 100).toString(), 10);
+            //     const minutes = this.place.workingPeriod.timeEnd % 100;
+            //
+            //     timeEnd = `${this.formatNumber(hours)}:${this.formatNumber(minutes)}`;
+            // }
+            //
+            // console.log(timeStart);
+            // console.log(timeEnd);
+
             return {
                 dayStart: index,
-                dayOff: false,
-                worksAllDay: false,
-                dayEnd: index,
-                timeStart: '09:00',
-                timeEnd: '18:00',
+                dayOff: this.place?.workingPeriod?.dayOff || false,
+                worksAllDay: this.place?.workingPeriod?.worksAllDay || false,
+                dayEnd: this.place?.workingPeriod?.dayEnd || index,
+                timeStart,
+                timeEnd,
             };
         });
 
         if (this.place) {
             this.placeName = this.place.name;
+            this.categories = this.place.categories.map((category: any) => category.id);
+            this.restDuration = this.place.restDuration.id;
+            this.restCost = this.place.restCost.id;
+            this.companySize = this.place.companySize.id;
+            this.isActiveRest = this.place.isActiveRest;
         }
 
         this.placeLatitude = this.place?.latitude || cherkasyCenter.lat;
         this.placeLongitude = this.place?.longitude || cherkasyCenter.lng;
+    }
+
+    formatNumber(number: number) {
+        return number < 10 ? `0${number}` : number.toString();
     }
 
     mounted() {
@@ -226,7 +259,7 @@ export default class PlaceForm extends Vue {
 
         this.$nextTick(() => {
             this.map = L.map('placeFormMap');
-            this.zoomToPoint(cherkasyCenter.lat, cherkasyCenter.lng, 14);
+            this.zoomToPoint(this.placeLatitude, this.placeLongitude, 14);
 
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution:
@@ -292,6 +325,7 @@ export default class PlaceForm extends Vue {
         });
 
         return {
+            id: this.place ? this.place.id : null,
             periods,
             name: this.placeName,
             latitude: this.placeLatitude,

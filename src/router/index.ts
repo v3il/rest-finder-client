@@ -53,11 +53,6 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
     const isAuthorized = store.getters['auth/isAuthorized'];
-    await store.dispatch('user/loadUser');
-
-    const user = store.getters['user/u'];
-
-    console.log(user);
 
     if (['login', 'register'].includes(to.name || '') && isAuthorized) {
         return next({ name: 'home' });
@@ -68,12 +63,6 @@ router.beforeEach(async (to, from, next) => {
             next();
         } else {
             next({ name: 'login' });
-        }
-    } else if (to.meta.forAdmin) {
-        if (user.isAdmin) {
-            next();
-        } else {
-            next({ name: 'home' });
         }
     } else {
         next();

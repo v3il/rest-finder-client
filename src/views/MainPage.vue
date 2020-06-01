@@ -151,6 +151,7 @@ import { Ref } from 'vue-property-decorator';
 
 import RatingBar from '@/components/RatingBar.vue';
 import { UserPublicData } from '@/index.d';
+import store from '@/store';
 import BasePageLayout from './BasePageLayout.vue';
 import PlaceInfo from '../components/PlaceInfo.vue';
 import Filters from '../components/Filters.vue';
@@ -179,6 +180,16 @@ const cherkasyCenter = {
         Review,
         RatingBar,
         PlaceForm,
+    },
+    async beforeRouteEnter(to: any, from: any, next: any) {
+        try {
+            await store.dispatch('user/loadUser');
+            await store.dispatch('filters/loadFilters');
+        } catch (error) {
+            eventBus.$emit('notify-error', error.response.data.error);
+        }
+
+        next();
     },
 })
 export default class MainPage extends Vue {
@@ -218,19 +229,6 @@ export default class MainPage extends Vue {
 
     layer!: any;
 
-    async created() {
-        this.loadUser();
-        this.loadFilters();
-
-        const r = await axios.get('/places', {
-            params: {
-                confirmed: false,
-            },
-        });
-
-        console.log(r.data.places);
-    }
-
     async mounted() {
         const { L } = window;
 
@@ -268,8 +266,6 @@ export default class MainPage extends Vue {
                     this.selectedPlaceCircle = L.circle([place.latitude, place.longitude], {
                         radius: 20,
                     }).addTo(this.map);
-
-                    console.log(this.selectedPlaceCircle);
                 });
             });
 
