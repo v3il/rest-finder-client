@@ -3,6 +3,8 @@ import axios from '@/axios';
 import GoogleAuthService from '@/service/GoogleAuthService';
 import FacebookAuthService from '@/service/FacebookAuthService';
 
+import store from '@/store';
+
 const tokenLocalStorageKey = 'rest_finder_token';
 
 function getTokenFromLocalStorage(): TokenData | null {
@@ -71,6 +73,8 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+
+            store.commit('user/SET_USER_DATA', null);
 
             context.commit('SET_TOKEN', null);
         },

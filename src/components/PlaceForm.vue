@@ -91,7 +91,7 @@
                 <input
                     type="time"
                     class="period-picker__start-time-picker"
-                    :value="period.timeStart"
+                    v-model="period.timeStart"
                     :disabled="period.dayOff || period.worksAllDay"
                 />
 
@@ -100,7 +100,7 @@
                 <input
                     type="time"
                     class="period-picker__end-time-picker"
-                    :value="period.timeEnd"
+                    v-model="period.timeEnd"
                     :disabled="period.dayOff || period.worksAllDay"
                 />
 
@@ -109,13 +109,13 @@
                     class="period-picker__end-day-picker"
                     :disabled="period.dayOff || period.worksAllDay"
                 >
-                    <option :value="period.dayEnd">{{
-                        translateText(`daysOfWeek.${period.dayEnd}`)
+                    <option :value="period.dayStart">{{
+                        translateText(`daysOfWeek.${period.dayStart}`)
                     }}</option>
 
-                    <option :value="period.dayEnd + 1 === 7 ? 0 : period.dayEnd + 1">{{
+                    <option :value="period.dayStart + 1 === 7 ? 0 : period.dayStart + 1">{{
                         translateText(
-                            `daysOfWeek.${period.dayEnd + 1 === 7 ? 0 : period.dayEnd + 1}`,
+                            `daysOfWeek.${period.dayStart + 1 === 7 ? 0 : period.dayStart + 1}`,
                         )
                     }}</option>
                 </select>
@@ -203,39 +203,24 @@ export default class PlaceForm extends Vue {
 
     created() {
         this.periods = Array.from({ length: 7 }).map((_, index) => {
-            const timeStart = this.place?.workingPeriod?.timeStart || '09:00';
-            const timeEnd = this.place?.workingPeriod?.timeEnd || '18:00';
+            const periodForDay = this.place?.workingPeriods?.find(
+                (period: any) => period.dayStart === index,
+            );
 
-            // if (this.place?.workingPeriod) {
-            //     const hours = Math.floor(this.place.workingPeriod.startTime / 100);
-            //     const minutes = this.place.workingPeriod.timeStart % 100;
-            //
-            //     timeStart = `${this.formatNumber(hours)}:${this.formatNumber(minutes)}`;
-            // }
-            //
-            // let timeEnd = '18:00';
-            //
-            console.log(this.place?.workingPeriod);
-            //
-            // if (this.place?.workingPeriod) {
-            //     const hours = parseInt((this.place.workingPeriod.timeEnd / 100).toString(), 10);
-            //     const minutes = this.place.workingPeriod.timeEnd % 100;
-            //
-            //     timeEnd = `${this.formatNumber(hours)}:${this.formatNumber(minutes)}`;
-            // }
-            //
-            // console.log(timeStart);
-            // console.log(timeEnd);
+            const timeStart = periodForDay?.timeStart || '09:00';
+            const timeEnd = periodForDay?.timeEnd || '18:00';
 
             return {
                 dayStart: index,
-                dayOff: this.place?.workingPeriod?.dayOff || false,
-                worksAllDay: this.place?.workingPeriod?.worksAllDay || false,
-                dayEnd: this.place?.workingPeriod?.dayEnd || index,
+                dayOff: periodForDay?.dayOff || false,
+                worksAllDay: periodForDay?.worksAllDay || false,
+                dayEnd: periodForDay?.dayEnd || index,
                 timeStart,
                 timeEnd,
             };
         });
+
+        this.periods.push(this.periods.shift());
 
         if (this.place) {
             this.placeName = this.place.name;

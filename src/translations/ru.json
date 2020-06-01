@@ -68,7 +68,10 @@
     "confirmed": "Подтвержденные",
     "new": "Неподтвержденные",
     "placeRemoved": "Заведение успешно удалено",
-    "placeConfirmed": "Заведение подтверждена",
+    "placeConfirmed": "Заведение подтверждено",
+    "updatePlaceDialogTitle": "Обновление данных заведения",
+    "updatePlace": "Обновить данные",
+    "placesShown": "Заведений отображается: %s",
 
     "daysOfWeek": {
         "0":  "Воскресенье",

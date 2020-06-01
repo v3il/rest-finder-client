@@ -36,7 +36,7 @@ export default {
             context.commit('SET_LOADING_STATE', true);
 
             try {
-                const response = await axios.get('/filters');
+                const response = await axios.get('/filters/v2');
                 const filters = response.data;
 
                 filters.categories = filters.categories.map((category: any, index: number) => {

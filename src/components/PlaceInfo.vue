@@ -1,6 +1,6 @@
 <template>
     <div class="place-info">
-        <h5>{{ placeInfo.name }} ({{ placeInfo.id }})</h5>
+        <h5>{{ placeInfo.name }}</h5>
 
         <span
             class="badge badge-primary"
@@ -58,12 +58,12 @@
         <div class="place-info__info-block">
             <span class="bold-label">{{ translateText('businessHoursForToday') }}:</span>
             {{
-                placeInfo.workingPeriod
-                    ? placeInfo.workingPeriod.worksAllDay
+                placeInfo.workingPeriodForToday
+                    ? placeInfo.workingPeriodForToday.worksAllDay
                         ? translateText('allDay')
-                        : placeInfo.workingPeriod.dayOff
+                        : placeInfo.workingPeriodForToday.dayOff
                         ? translateText('dayOff')
-                        : `${placeInfo.workingPeriod.timeStart} - ${placeInfo.workingPeriod.timeEnd}`
+                        : `${placeInfo.workingPeriodForToday.timeStart} - ${placeInfo.workingPeriodForToday.timeEnd}`
                     : 'No data'
             }}
         </div>

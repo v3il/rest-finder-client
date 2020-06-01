@@ -16,6 +16,8 @@
                     <option :value="true">{{ translateText(`confirmed`) }}</option>
                     <option :value="false">{{ translateText(`new`) }}</option>
                 </select>
+
+                {{ translateText('placesShown', [filteredPlaces.length]) }}
             </div>
 
             <div class="control-panel__content">
@@ -37,8 +39,8 @@
                         <tr v-for="place in filteredPlaces" :key="place.id">
                             <td>{{ place.id }}</td>
                             <td class="name">{{ place.name }}</td>
-                            <td>{{ place.restCost.name }}</td>
-                            <td>{{ place.restDuration.name }}</td>
+                            <td style="white-space: nowrap;">{{ place.restCost.name }}</td>
+                            <td style="white-space: nowrap;">{{ place.restDuration.name }}</td>
                             <td style="white-space: nowrap;">{{ place.companySize.name }}</td>
                             <td>
                                 {{
@@ -81,14 +83,14 @@
         <template v-if="selectedPlace">
             <v-dialog ref="editPlaceDialog" :max-width="1000" @close="selectedPlace = null">
                 <template slot="header">
-                    {{ translateText('addPlaceDialogTitle') }}
+                    {{ translateText('updatePlaceDialogTitle') }}
                 </template>
 
                 <place-form ref="placeForm" :place="selectedPlace"></place-form>
 
                 <template slot="footer">
                     <button class="btn btn-primary left-button" @click="updatePlaceRequest">
-                        {{ translateText('addPlace') }}
+                        {{ translateText('updatePlace') }}
                     </button>
 
                     <button class="btn btn-secondary" @click="editPlaceDialog.triggerClose()">
@@ -138,8 +140,6 @@ import axios from '../axios';
     },
 })
 export default class ControlPanel extends Vue {
-    editPlacePopupShown = false;
-
     places = [];
 
     showConfirmed = true;
@@ -156,7 +156,10 @@ export default class ControlPanel extends Vue {
 
     async created() {
         try {
-            const response = await axios.get('/places');
+            const response = await axios.get('/places', {
+                params: { ignoreStatus: true },
+            });
+
             this.places = response.data.places;
         } catch (error) {
             eventBus.$emit('notify-error', error.response.data.error);

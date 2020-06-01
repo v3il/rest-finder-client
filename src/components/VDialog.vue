@@ -10,11 +10,7 @@
                 <div class="vdialog__inner" :style="{ maxWidth: `${maxWidth}px` }">
                     <div class="u-content_h3 vdialog__header">
                         <div class="vdialog__title">
-                            <h5>
-                                <slot name="header">
-                                    Title
-                                </slot>
-                            </h5>
+                            <h5><slot name="header">Title</slot></h5>
                         </div>
 
                         <i

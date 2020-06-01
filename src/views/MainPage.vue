@@ -185,11 +185,11 @@ const cherkasyCenter = {
         try {
             await store.dispatch('user/loadUser');
             await store.dispatch('filters/loadFilters');
+
+            next();
         } catch (error) {
             eventBus.$emit('notify-error', error.response.data.error);
         }
-
-        next();
     },
 })
 export default class MainPage extends Vue {
@@ -259,6 +259,8 @@ export default class MainPage extends Vue {
                     this.selectedPlace = place;
                     this.zoomToPoint(place.latitude, place.longitude, 18);
 
+                    console.log(place.id);
+
                     if (this.selectedPlaceCircle) {
                         this.selectedPlaceCircle.remove();
                     }
@@ -306,8 +308,16 @@ export default class MainPage extends Vue {
                 rating: +this.reviewRating,
             });
 
+            const { placeMeanRating, placeReviewCount } = response.data;
+
             this.reviews.push(response.data.review);
+            this.selectedPlace.meanRating = placeMeanRating;
+            this.selectedPlace.reviewsCount = placeReviewCount;
+
             this.addReviewDialog.triggerClose();
+
+            this.reviewComment = '';
+            this.reviewRating = 5;
 
             eventBus.$emit('notify-success', this.translateText('reviewAdded'));
         } catch (error) {
@@ -333,11 +343,15 @@ export default class MainPage extends Vue {
 
     async removeReview(review: any) {
         try {
-            await axios.post('/reviews/remove', {
+            const response = await axios.post('/reviews/remove', {
                 reviewId: review.id,
             });
 
+            const { placeMeanRating, placeReviewCount } = response.data;
+
             this.reviews = this.reviews.filter((item: any) => item !== review);
+            this.selectedPlace.meanRating = placeMeanRating;
+            this.selectedPlace.reviewsCount = placeReviewCount;
 
             eventBus.$emit('notify-success', this.translateText('reviewRemoved'));
         } catch (error) {

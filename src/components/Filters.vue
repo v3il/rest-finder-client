@@ -9,6 +9,8 @@
                 :size="filters.categories.length / 2"
                 v-model="selectedCategories"
             >
+                <option :value="0">{{ translateText('anyVariant2') }}</option>
+
                 <option
                     v-for="category in filters.categories"
                     :key="category.id"
@@ -22,6 +24,8 @@
 
         <div class="form-group">
             <select class="form-control" v-model="selectedCost">
+                <option :value="0">{{ translateText('anyVariant2') }}</option>
+
                 <option v-for="cost in filters.costs" :value="cost.id" :key="cost.id">{{
                     cost.name
                 }}</option>
@@ -32,6 +36,8 @@
 
         <div class="form-group">
             <select class="form-control" v-model="selectedCompanySize">
+                <option :value="0">{{ translateText('anyVariant2') }}</option>
+
                 <option
                     v-for="companySize in filters.companySizes"
                     :value="companySize.id"
@@ -45,6 +51,8 @@
 
         <div class="form-group">
             <select class="form-control" v-model="selectedRestDuration">
+                <option :value="0">{{ translateText('anyVariant2') }}</option>
+
                 <option
                     v-for="restDuration in filters.restDurations"
                     :value="restDuration.id"
@@ -138,7 +146,7 @@ const filtersModule = namespace('filters');
     },
 })
 export default class PlaceInfo extends Vue {
-    selectedCategories = [3];
+    selectedCategories = [0];
 
     selectedCost = 0;
 
