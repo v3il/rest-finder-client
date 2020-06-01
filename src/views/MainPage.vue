@@ -317,7 +317,7 @@ export default class MainPage extends Vue {
             this.addReviewDialog.triggerClose();
 
             this.reviewComment = '';
-            this.reviewRating = 5;
+            this.reviewRating = 3;
 
             eventBus.$emit('notify-success', this.translateText('reviewAdded'));
         } catch (error) {

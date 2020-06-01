@@ -26,11 +26,11 @@
                         <tr>
                             <th>ID</th>
                             <th class="name">{{ translateText('placeNameLabel') }}</th>
+                            <th>{{ translateText('categories') }}</th>
                             <th>{{ translateText('costs') }}</th>
                             <th>{{ translateText('restDurations') }}</th>
                             <th>{{ translateText('companySizes') }}</th>
                             <th>{{ translateText('restTypes') }}</th>
-                            <th>{{ translateText('categories') }}</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -39,6 +39,14 @@
                         <tr v-for="place in filteredPlaces" :key="place.id">
                             <td>{{ place.id }}</td>
                             <td class="name">{{ place.name }}</td>
+                            <td>
+                                <span
+                                    class="badge badge-primary"
+                                    v-for="category in place.categories"
+                                    :key="category.id"
+                                    >{{ category.name }}</span
+                                >
+                            </td>
                             <td style="white-space: nowrap;">{{ place.restCost.name }}</td>
                             <td style="white-space: nowrap;">{{ place.restDuration.name }}</td>
                             <td style="white-space: nowrap;">{{ place.companySize.name }}</td>
@@ -48,14 +56,6 @@
                                         ? translateText('activeRestType')
                                         : translateText('passiveRestType')
                                 }}
-                            </td>
-                            <td>
-                                <span
-                                    class="badge badge-primary"
-                                    v-for="category in place.categories"
-                                    :key="category.id"
-                                    >{{ category.name }}</span
-                                >
                             </td>
                             <td class="actions">
                                 <button

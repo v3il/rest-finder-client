@@ -72,6 +72,7 @@
     "updatePlaceDialogTitle": "Обновление данных заведения",
     "updatePlace": "Обновить данные",
     "placesShown": "Заведений отображается: %s",
+    "allCity": "Весь город",
 
     "daysOfWeek": {
         "0":  "Воскресенье",

@@ -36,7 +36,7 @@
 
         <div class="form-group">
             <select class="form-control" v-model="selectedCompanySize">
-                <option :value="0">{{ translateText('anyVariant2') }}</option>
+                <option :value="0">{{ translateText('anyVariant1') }}</option>
 
                 <option
                     v-for="companySize in filters.companySizes"
@@ -170,7 +170,7 @@ export default class PlaceInfo extends Vue {
 
     get distanceString() {
         return this.selectedDistance === 0
-            ? this.translateText('anyVariant3')
+            ? this.translateText('allCity')
             : this.translateText('distanceDescription', [this.selectedDistance]);
     }
 
