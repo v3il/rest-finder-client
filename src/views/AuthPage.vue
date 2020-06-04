@@ -40,20 +40,11 @@
                         {{ isLoginAction ? translateText('logIn') : translateText('register') }}
                     </button>
 
-                    <button
-                        class="btn btn-primary js-login-with-google"
-                        type="button"
-                        v-show="false"
-                    >
+                    <button class="btn btn-primary js-login-with-google" type="button">
                         <font-awesome-icon :icon="['fab', 'google']" />
                     </button>
 
-                    <button
-                        class="btn btn-primary"
-                        type="button"
-                        @click="loginWithFB"
-                        v-show="false"
-                    >
+                    <button class="btn btn-primary" type="button" @click="loginWithFB">
                         <font-awesome-icon :icon="['fab', 'facebook-f']" />
                     </button>
                 </div>
@@ -110,7 +101,7 @@ export default class AuthPage extends Vue {
 
     mounted() {
         this.isLoginAction = this.$route.name === 'login';
-        // this.initGoogleAuth();
+        this.initGoogleAuth();
     }
 
     async auth() {
