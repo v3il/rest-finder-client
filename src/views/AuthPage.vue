@@ -102,6 +102,8 @@ export default class AuthPage extends Vue {
     mounted() {
         this.isLoginAction = this.$route.name === 'login';
         this.initGoogleAuth();
+
+        console.log('Auth')
     }
 
     async auth() {
