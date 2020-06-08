@@ -49,6 +49,10 @@
                     </button>
                 </div>
 
+                <div v-if="isLoginAction">
+                    <a href="#" @click.prevent>{{ translateText('restorePassword') }}</a>
+                </div>
+
                 <div class="text-center auth-form__register-link">
                     <router-link :to="{ name: 'register' }" v-if="isLoginAction">
                         {{ translateText('register') }}
@@ -103,7 +107,7 @@ export default class AuthPage extends Vue {
         this.isLoginAction = this.$route.name === 'login';
         this.initGoogleAuth();
 
-        console.log('Auth')
+        console.log('Auth');
     }
 
     async auth() {
