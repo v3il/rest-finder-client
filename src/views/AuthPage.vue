@@ -63,6 +63,35 @@
                     </router-link>
                 </div>
             </form>
+
+            <v-dialog ref="resetPasswordDialog" :max-width="600">
+                <template slot="header">
+                    {{ translateText('addPlaceDialogTitle') }}
+                </template>
+
+                <div class="form-group">
+                    <label for="place-name">{{ translateText('restDurations') }}</label>
+
+                    <select class="form-control" v-model="restDuration">
+                        <option
+                            v-for="restDuration in filters.restDurations"
+                            :value="restDuration.id"
+                            :key="restDuration.id"
+                            >{{ restDuration.name }}</option
+                        >
+                    </select>
+                </div>
+
+                <template slot="footer">
+                    <button class="btn btn-primary left-button" @click="_resetPassword">
+                        {{ translateText('addPlace') }}
+                    </button>
+
+                    <button class="btn btn-secondary" @click="resetPasswordDialog.triggerClose()">
+                        {{ translateText('close') }}
+                    </button>
+                </template>
+            </v-dialog>
         </div>
     </base-page-layout>
 </template>
@@ -77,6 +106,8 @@ import BasePageLayout from '@/views/BasePageLayout.vue';
 
 import eventBus from '@/eventBus';
 import { namespace } from 'vuex-class';
+import VDialog from '@/components/VDialog.vue';
+import { Ref } from 'vue-property-decorator';
 
 const authModule = namespace('auth');
 
@@ -84,6 +115,7 @@ const authModule = namespace('auth');
     name: 'AuthPage',
     components: {
         BasePageLayout,
+        VDialog,
     },
 })
 export default class AuthPage extends Vue {
@@ -92,6 +124,8 @@ export default class AuthPage extends Vue {
     userEmail = '';
 
     userPassword = '';
+
+    restorePasswordUserEmail = '';
 
     @authModule.Action('login') login!: Function;
 
@@ -102,6 +136,8 @@ export default class AuthPage extends Vue {
     @authModule.Action('loginWithFacebook') loginWithFacebook!: Function;
 
     @authModule.Mutation('SET_TOKEN') setToken!: Function;
+
+    @Ref() resetPasswordDialog!: any;
 
     mounted() {
         this.isLoginAction = this.$route.name === 'login';
@@ -180,6 +216,10 @@ export default class AuthPage extends Vue {
             this.$router.replace({ name: 'home' });
         });
     }
+
+    resetPassword() {}
+
+    async _resetPassword() {}
 }
 </script>
 
