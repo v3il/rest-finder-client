@@ -80,6 +80,7 @@
     "resetPasswordNotification": "На Вашу почту было отправлено письмо с ссылкой для сброса пароля",
     "newPassword": "Новый пароль",
     "newPasswordConfirmation": "Повторите новый пароль",
+    "passwordsAreNotEqual": "Пароли не совпадают",
 
     "daysOfWeek": {
         "0":  "Воскресенье",

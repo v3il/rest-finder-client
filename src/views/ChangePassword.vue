@@ -16,6 +16,10 @@
                         v-model="newPassword"
                         required
                     />
+
+                    <small id="emailHelp" class="form-text text-muted">{{
+                        translateText('passwordHint')
+                    }}</small>
                 </div>
 
                 <div class="form-group">
@@ -66,6 +70,10 @@ export default class SetNewPassword extends Vue {
     newPasswordConfirmation = '';
 
     async changePassword() {
+        if (this.newPassword !== this.newPasswordConfirmation) {
+            return eventBus.$emit('notify-error', this.translateText('passwordsAreNotEqual'));
+        }
+
         try {
             // await axios.post('/user/reset_password', { email: this.userEmail });
             eventBus.$emit('notify-success', this.translateText('resetPasswordNotification'));
