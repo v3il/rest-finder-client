@@ -49,11 +49,11 @@
                     </button>
                 </div>
 
-                <div class="form-auth-reset-password" v-if="isLoginAction">
-                    <router-link :to="{ name: 'restore_password' }">{{
-                        translateText('restorePassword')
-                    }}</router-link>
-                </div>
+                <!--                <div class="form-auth-reset-password" v-if="isLoginAction">-->
+                <!--                    <router-link :to="{ name: 'restore_password' }">{{-->
+                <!--                        translateText('restorePassword')-->
+                <!--                    }}</router-link>-->
+                <!--                </div>-->
 
                 <div class="text-center auth-form__register-link">
                     <router-link :to="{ name: 'register' }" v-if="isLoginAction">
