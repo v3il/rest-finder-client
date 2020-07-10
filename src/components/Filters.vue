@@ -201,13 +201,13 @@ export default class PlaceInfo extends Vue {
             params.restCost = this.selectedCost;
         }
 
-        if (this.selectedRestDuration > 0) {
-            params.restDuration = this.selectedRestDuration;
-        }
-
-        if (this.selectedCompanySize > 0) {
-            params.companySize = this.selectedCompanySize;
-        }
+        // if (this.selectedRestDuration > 0) {
+        //     params.restDuration = this.selectedRestDuration;
+        // }
+        //
+        // if (this.selectedCompanySize > 0) {
+        //     params.companySize = this.selectedCompanySize;
+        // }
 
         if (this.selectedRestType > 0) {
             params.restType = this.selectedRestType === 1;
