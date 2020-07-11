@@ -150,9 +150,9 @@ export default class PlaceInfo extends Vue {
 
     selectedCost = 0;
 
-    selectedRestDuration = 0;
-
-    selectedCompanySize = 0;
+    // selectedRestDuration = 0;
+    //
+    // selectedCompanySize = 0;
 
     selectedRestType = 0;
 
