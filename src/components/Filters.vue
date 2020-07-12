@@ -32,36 +32,6 @@
             </select>
         </div>
 
-        <!--        <h6>{{ translateText('companySizes') }}</h6>-->
-
-        <!--        <div class="form-group">-->
-        <!--            <select class="form-control" v-model="selectedCompanySize">-->
-        <!--                <option :value="0">{{ translateText('anyVariant1') }}</option>-->
-
-        <!--                <option-->
-        <!--                    v-for="companySize in filters.companySizes"-->
-        <!--                    :value="companySize.id"-->
-        <!--                    :key="companySize.id"-->
-        <!--                    >{{ companySize.name }}</option-->
-        <!--                >-->
-        <!--            </select>-->
-        <!--        </div>-->
-
-        <!--        <h6>{{ translateText('restDurations') }}</h6>-->
-
-        <!--        <div class="form-group">-->
-        <!--            <select class="form-control" v-model="selectedRestDuration">-->
-        <!--                <option :value="0">{{ translateText('anyVariant2') }}</option>-->
-
-        <!--                <option-->
-        <!--                    v-for="restDuration in filters.restDurations"-->
-        <!--                    :value="restDuration.id"-->
-        <!--                    :key="restDuration.id"-->
-        <!--                    >{{ restDuration.name }}</option-->
-        <!--                >-->
-        <!--            </select>-->
-        <!--        </div>-->
-
         <h6>{{ translateText('restTypes') }}</h6>
 
         <div class="form-group">
