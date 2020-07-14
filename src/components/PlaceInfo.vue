@@ -14,15 +14,15 @@
             {{ placeInfo.restCost.name }}
         </div>
 
-        <div class="place-info__info-block">
-            <span class="bold-label">{{ translateText('restDurations') }}:</span>
-            {{ placeInfo.restDuration.name }}
-        </div>
+        <!--        <div class="place-info__info-block">-->
+        <!--            <span class="bold-label">{{ translateText('restDurations') }}:</span>-->
+        <!--            {{ placeInfo.restDuration.name }}-->
+        <!--        </div>-->
 
-        <div class="place-info__info-block">
-            <span class="bold-label">{{ translateText('companySizes') }}:</span>
-            {{ placeInfo.companySize.name }}
-        </div>
+        <!--        <div class="place-info__info-block">-->
+        <!--            <span class="bold-label">{{ translateText('companySizes') }}:</span>-->
+        <!--            {{ placeInfo.companySize.name }}-->
+        <!--        </div>-->
 
         <div class="place-info__info-block">
             <span class="bold-label">{{ translateText('restTypes') }}:</span>
