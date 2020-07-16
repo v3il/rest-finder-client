@@ -34,31 +34,31 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="place-name">{{ translateText('companySizes') }}</label>
+        <!--        <div class="form-group">-->
+        <!--            <label for="place-name">{{ translateText('companySizes') }}</label>-->
 
-            <select class="form-control" v-model="companySize">
-                <option
-                    v-for="companySize in filters.companySizes"
-                    :value="companySize.id"
-                    :key="companySize.id"
-                    >{{ companySize.name }}</option
-                >
-            </select>
-        </div>
+        <!--            <select class="form-control" v-model="companySize">-->
+        <!--                <option-->
+        <!--                    v-for="companySize in filters.companySizes"-->
+        <!--                    :value="companySize.id"-->
+        <!--                    :key="companySize.id"-->
+        <!--                    >{{ companySize.name }}</option-->
+        <!--                >-->
+        <!--            </select>-->
+        <!--        </div>-->
 
-        <div class="form-group">
-            <label for="place-name">{{ translateText('restDurations') }}</label>
+        <!--        <div class="form-group">-->
+        <!--            <label for="place-name">{{ translateText('restDurations') }}</label>-->
 
-            <select class="form-control" v-model="restDuration">
-                <option
-                    v-for="restDuration in filters.restDurations"
-                    :value="restDuration.id"
-                    :key="restDuration.id"
-                    >{{ restDuration.name }}</option
-                >
-            </select>
-        </div>
+        <!--            <select class="form-control" v-model="restDuration">-->
+        <!--                <option-->
+        <!--                    v-for="restDuration in filters.restDurations"-->
+        <!--                    :value="restDuration.id"-->
+        <!--                    :key="restDuration.id"-->
+        <!--                    >{{ restDuration.name }}</option-->
+        <!--                >-->
+        <!--            </select>-->
+        <!--        </div>-->
 
         <div class="form-group">
             <label for="place-name">{{ translateText('restTypes') }}</label>
