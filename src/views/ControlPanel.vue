@@ -28,8 +28,6 @@
                             <th class="name">{{ translateText('placeNameLabel') }}</th>
                             <th>{{ translateText('categories') }}</th>
                             <th>{{ translateText('costs') }}</th>
-                            <!--                            <th>{{ translateText('restDurations') }}</th>-->
-                            <!--                            <th>{{ translateText('companySizes') }}</th>-->
                             <th>{{ translateText('restTypes') }}</th>
                             <th>&nbsp;</th>
                         </tr>
