@@ -13,12 +13,12 @@
                             <h5><slot name="header">Title</slot></h5>
                         </div>
 
-                        <i
-                            class="material-icons vdialog__close-btn"
+                        <font-awesome-icon
+                            :icon="['fa', 'times']"
+                            class="vdialog__close-btn"
                             :class="{ 'vdialog__close-btn--disabled': !ableToBeClosed }"
                             @click="triggerClose"
-                            >clear</i
-                        >
+                        />
                     </div>
 
                     <div class="vdialog__content">
