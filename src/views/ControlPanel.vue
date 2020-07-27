@@ -48,8 +48,8 @@
                                 >
                             </td>
                             <td style="white-space: nowrap;">{{ place.restCost.name }}</td>
-                            <td style="white-space: nowrap;">{{ place.restDuration.name }}</td>
-                            <td style="white-space: nowrap;">{{ place.companySize.name }}</td>
+                            <!--                            <td style="white-space: nowrap;">{{ place.restDuration.name }}</td>-->
+                            <!--                            <td style="white-space: nowrap;">{{ place.companySize.name }}</td>-->
                             <td>
                                 {{
                                     place.isActiveRest
