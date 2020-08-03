@@ -6,7 +6,7 @@
             <select
                 multiple
                 class="form-control"
-                :size="filters.categories.length / 2"
+                :size="filters.categories.length + 1"
                 v-model="selectedCategories"
             >
                 <option :value="0">{{ translateText('anyVariant2') }}</option>
