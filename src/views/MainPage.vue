@@ -20,7 +20,7 @@
 
         <div class="main-page">
             <div class="main-page__map">
-                <div id="mapid" style=""></div>
+                <div id="mapid"></div>
             </div>
 
             <div class="main-page__filters">
