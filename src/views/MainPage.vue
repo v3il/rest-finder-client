@@ -21,6 +21,20 @@
         <div class="main-page">
             <div class="main-page__map">
                 <div id="mapid"></div>
+
+                <button
+                    @click="mobileMenuOpened = !mobileMenuOpened"
+                    style="
+                        z-index: 9999;
+                        background-color: green;
+                        color: #fff;
+                        position: fixed;
+                        left: 0;
+                        bottom: 0;
+                    "
+                >
+                    {{ mobileMenuOpened ? 'Close menu' : 'Open menu' }}
+                </button>
             </div>
 
             <div class="main-page__filters">
@@ -228,6 +242,8 @@ export default class MainPage extends Vue {
     map!: any;
 
     layer!: any;
+
+    mobileMenuOpened = false;
 
     async mounted() {
         const { L } = window;
