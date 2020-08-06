@@ -256,6 +256,16 @@ export default class MainPage extends Vue {
         }).addTo(this.map);
 
         this.layer = L.layerGroup().addTo(this.map);
+
+        const resizeListener = () => {
+            console.log(window.innerWidth);
+        };
+
+        window.addEventListener('resize', resizeListener);
+
+        this.$on('hook:beforeDestroy', () => {
+            window.removeEventListener('resize', resizeListener);
+        });
     }
 
     async findPlaces(params: any) {
