@@ -157,6 +157,7 @@ export default class BasePageLayout extends Vue {
 
     &__main {
         height: calc(100vh - 64px);
+        overflow-x: hidden;
     }
 
     &__error {

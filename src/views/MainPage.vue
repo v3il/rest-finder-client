@@ -37,7 +37,13 @@
                 </button>
             </div>
 
-            <div class="main-page__filters">
+            <div
+                class="main-page__filters"
+                :class="{
+                    'main-page__filters-mobile': isMobileMode,
+                    'main-page__filters-mobile--open': isMobileMode && mobileMenuOpened,
+                }"
+            >
                 <span v-if="filtersLoading">{{ translateText('filtersLoading') }}</span>
 
                 <template v-else-if="selectedPlace && reviewsShown">
@@ -245,6 +251,8 @@ export default class MainPage extends Vue {
 
     mobileMenuOpened = false;
 
+    isMobileMode = false;
+
     async mounted() {
         const { L } = window;
 
@@ -258,7 +266,12 @@ export default class MainPage extends Vue {
         this.layer = L.layerGroup().addTo(this.map);
 
         const resizeListener = () => {
-            console.log(window.innerWidth);
+            this.isMobileMode = window.innerWidth < 900;
+
+            if (this.map) {
+                // eslint-disable-next-line no-underscore-dangle
+                this.map._onResize();
+            }
         };
 
         window.addEventListener('resize', resizeListener);
@@ -266,6 +279,8 @@ export default class MainPage extends Vue {
         this.$on('hook:beforeDestroy', () => {
             window.removeEventListener('resize', resizeListener);
         });
+
+        resizeListener();
     }
 
     async findPlaces(params: any) {
@@ -284,8 +299,6 @@ export default class MainPage extends Vue {
                 marker.on('click', () => {
                     this.selectedPlace = place;
                     this.zoomToPoint(place.latitude, place.longitude, 18);
-
-                    console.log(place.id);
 
                     if (this.selectedPlaceCircle) {
                         this.selectedPlaceCircle.remove();
@@ -416,6 +429,7 @@ export default class MainPage extends Vue {
 .main-page {
     display: flex;
     height: 100%;
+    position: relative;
 
     &__map {
         flex: 1;
@@ -426,6 +440,21 @@ export default class MainPage extends Vue {
         padding: 12px 18px;
         overflow-y: auto;
         overflow-x: hidden;
+        background-color: #fff;
+        z-index: 999;
+    }
+
+    &__filters-mobile {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+
+    &__filters-mobile--open {
+        transform: translateX(0);
     }
 
     &__categories-cb {
