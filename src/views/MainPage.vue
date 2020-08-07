@@ -396,7 +396,7 @@ export default class MainPage extends Vue {
     }
 
     &__filters {
-        flex-basis: 500px;
+        flex-basis: 350px;
         padding: 12px 18px;
         overflow-y: auto;
         overflow-x: hidden;
