@@ -24,6 +24,7 @@
 
                 <button
                     @click="mobileMenuOpened = !mobileMenuOpened"
+                    class="btn btn-primary"
                     style="
                         z-index: 9999;
                         background-color: green;
