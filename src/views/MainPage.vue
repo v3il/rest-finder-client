@@ -24,15 +24,8 @@
 
                 <button
                     @click="mobileMenuOpened = !mobileMenuOpened"
-                    class="btn btn-primary"
-                    style="
-                        z-index: 9999;
-                        background-color: green;
-                        color: #fff;
-                        position: fixed;
-                        left: 0;
-                        bottom: 0;
-                    "
+                    class="btn btn-primary main-page__mobile-menu-btn"
+                    style=""
                 >
                     {{ mobileMenuOpened ? 'Close menu' : 'Open menu' }}
                 </button>
@@ -460,6 +453,15 @@ export default class MainPage extends Vue {
 
     &__categories-cb {
         margin-bottom: 0;
+    }
+
+    &__mobile-menu-btn {
+        z-index: 9999;
+        background-color: green;
+        color: #fff;
+        position: fixed;
+        left: 0;
+        bottom: 0;
     }
 }
 
