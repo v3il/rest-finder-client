@@ -24,8 +24,7 @@
 
                 <button
                     @click="mobileMenuOpened = !mobileMenuOpened"
-                    class="btn btn-primary main-page__mobile-menu-btn"
-                    style=""
+                    class="btn btn-primary btn-sm main-page__mobile-menu-btn"
                 >
                     {{ mobileMenuOpened ? 'Close menu' : 'Open menu' }}
                 </button>
