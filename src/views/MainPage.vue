@@ -26,7 +26,7 @@
                     @click="mobileMenuOpened = !mobileMenuOpened"
                     class="btn btn-primary btn-sm main-page__mobile-menu-btn"
                 >
-                    {{ mobileMenuOpened ? 'Close menu' : 'Open menu' }}
+                    {{ mobileMenuOpened ? translateText('closeMenu') : translateText('openMenu') }}
                 </button>
             </div>
 
