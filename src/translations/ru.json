@@ -81,6 +81,8 @@
     "newPassword": "Новый пароль",
     "newPasswordConfirmation": "Повторите новый пароль",
     "passwordsAreNotEqual": "Пароли не совпадают",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню",
 
     "daysOfWeek": {
         "0":  "Воскресенье",
